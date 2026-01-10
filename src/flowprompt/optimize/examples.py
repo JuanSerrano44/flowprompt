@@ -40,7 +40,7 @@ class Example(Generic[T]):
 
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary representation."""
-        output_val = self.output
+        output_val: Any = self.output
         if isinstance(self.output, BaseModel):
             output_val = self.output.model_dump()
         return {

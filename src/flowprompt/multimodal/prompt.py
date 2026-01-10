@@ -76,7 +76,7 @@ class MultimodalPrompt(Prompt[OutputT], Generic[OutputT], metaclass=PromptMeta):
     def _validate_multimodal(self) -> MultimodalPrompt[OutputT]:
         """Validate multimodal content."""
         # Run parent validation
-        super()._interpolate_templates()
+        super()._interpolate_templates()  # type: ignore[operator]
         return self
 
     def has_multimodal_content(self) -> bool:
@@ -264,7 +264,7 @@ class MultimodalPrompt(Prompt[OutputT], Generic[OutputT], metaclass=PromptMeta):
         return self.model_copy(update={"video": video})
 
 
-class VisionPrompt(MultimodalPrompt[OutputT], Generic[OutputT]):
+class VisionPrompt(MultimodalPrompt[OutputT], Generic[OutputT]):  # type: ignore[metaclass]
     """Specialized prompt for vision/image analysis tasks.
 
     Provides convenient methods for common vision tasks.
@@ -380,7 +380,7 @@ class VisionPrompt(MultimodalPrompt[OutputT], Generic[OutputT]):
         return ComparisonPrompt().with_images(images)
 
 
-class DocumentPrompt(MultimodalPrompt[OutputT], Generic[OutputT]):
+class DocumentPrompt(MultimodalPrompt[OutputT], Generic[OutputT]):  # type: ignore[metaclass]
     """Specialized prompt for document analysis tasks.
 
     Provides convenient methods for processing PDFs and documents.

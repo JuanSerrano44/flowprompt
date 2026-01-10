@@ -297,9 +297,8 @@ class EpsilonGreedyAllocator(TrafficAllocator):
         else:
             # Exploit: choose variant with highest Q-value
             best_name = max(state.q_values.keys(), key=lambda k: state.q_values[k])
-            variant = experiment.get_variant(best_name)
-            if variant is None:
-                variant = experiment.variants[0]
+            maybe_variant = experiment.get_variant(best_name)
+            variant = maybe_variant if maybe_variant else experiment.variants[0]
 
         # Decay epsilon
         self._epsilon = max(self._min_epsilon, self._epsilon * self._epsilon_decay)
@@ -377,9 +376,9 @@ class UCBAllocator(TrafficAllocator):
 
         # Select variant with highest UCB
         best_name = max(ucb_values.keys(), key=lambda k: ucb_values[k])
-        variant = experiment.get_variant(best_name)
+        maybe_variant = experiment.get_variant(best_name)
 
-        return variant if variant else experiment.variants[0]
+        return maybe_variant if maybe_variant else experiment.variants[0]
 
     def update(
         self,
@@ -451,9 +450,9 @@ class ThompsonSamplingAllocator(TrafficAllocator):
 
         # Select variant with highest sample
         best_name = max(samples.keys(), key=lambda k: samples[k])
-        variant = experiment.get_variant(best_name)
+        maybe_variant = experiment.get_variant(best_name)
 
-        return variant if variant else experiment.variants[0]
+        return maybe_variant if maybe_variant else experiment.variants[0]
 
     def update(
         self,

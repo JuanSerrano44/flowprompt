@@ -12,8 +12,12 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass, field
+from typing import Any, Callable
 
 from flowprompt.testing.experiment import VariantStats
+
+# Type alias for significance test functions
+SignificanceTestFunc = Callable[[VariantStats, VariantStats, float], "StatisticalResult"]
 
 
 @dataclass
@@ -40,7 +44,7 @@ class StatisticalResult:
     power: float | None = None
     sample_size_recommendation: int | None = None
     test_name: str = ""
-    details: dict[str, float] = field(default_factory=dict)
+    details: dict[str, Any] = field(default_factory=dict)
 
     def summary(self) -> str:
         """Generate a human-readable summary."""
@@ -681,7 +685,7 @@ def run_significance_test(
     Returns:
         StatisticalResult with test results.
     """
-    tests = {
+    tests: dict[str, SignificanceTestFunc] = {
         "z_test": two_proportion_z_test,
         "chi_squared": chi_squared_test,
         "t_test": t_test_means,

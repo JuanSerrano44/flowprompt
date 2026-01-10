@@ -60,16 +60,16 @@ def _evaluate_dataset(
     for ex in dataset:
         try:
             prompt = prompt_class(**ex.input)
-            result = prompt.run(model=model, temperature=temperature)
-            predictions.append(result)
+            output = prompt.run(model=model, temperature=temperature)
+            predictions.append(output)
             ground_truth.append(ex.output)
         except Exception:
             # On error, append None to keep alignment
             predictions.append(None)
             ground_truth.append(ex.output)
 
-    result = metric.evaluate(predictions, ground_truth)
-    return result.value
+    metric_result = metric.evaluate(predictions, ground_truth)
+    return metric_result.value
 
 
 @dataclass
@@ -432,7 +432,7 @@ class InstructionOptimizer(BaseOptimizer):
         from flowprompt.core.prompt import Prompt
 
         # Create optimizer prompt
-        class InstructionGenerator(Prompt):
+        class InstructionGenerator(Prompt):  # type: ignore[metaclass]
             system: str = """You are an expert prompt engineer. Your task is to improve LLM prompt instructions.
 
 Given the current prompt and its performance, generate improved versions that are:
