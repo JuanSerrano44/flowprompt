@@ -1,0 +1,228 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "flowprompt"
+version = "0.1.0"
+description = "Type-safe prompt management with automatic optimization for LLMs"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "Yotam Braun", email = "yotambarun93@gmail.com"}
+]
+maintainers = [
+    {name = "Yotam Braun", email = "yotambarun93@gmail.com"}
+]
+
+keywords = [
+    "llm",
+    "prompt",
+    "prompt-engineering",
+    "pydantic",
+    "openai",
+    "anthropic",
+    "claude",
+    "gpt",
+    "chatgpt",
+    "ai",
+    "machine-learning",
+    "nlp",
+    "prompt-optimization",
+    "structured-output",
+    "type-safety",
+    "prompt-management",
+    "llm-framework",
+    "prompt-versioning",
+    "observability",
+    "litellm",
+]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Text Processing :: Linguistic",
+    "Framework :: Pydantic :: 2",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3 :: Only",
+    "Typing :: Typed",
+    "Environment :: Console",
+    "Natural Language :: English",
+]
+
+dependencies = [
+    "pydantic>=2.0.0,<3.0.0",
+    "litellm>=1.0.0",
+    "jinja2>=3.0.0",
+    "pyyaml>=6.0.0",
+    "typing-extensions>=4.5.0; python_version<'3.11'",
+]
+
+[project.optional-dependencies]
+cli = [
+    "typer>=0.9.0",
+]
+
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.1.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-mock>=3.12.0",
+    "ruff>=0.1.0",
+    "mypy>=1.8.0",
+    "pre-commit>=3.6.0",
+    "types-requests",
+    "typer>=0.9.0",
+]
+
+tracing = [
+    "opentelemetry-api>=1.20.0",
+    "opentelemetry-sdk>=1.20.0",
+]
+
+optimization = [
+    "optuna>=3.5.0",
+]
+
+all = [
+    "flowprompt[cli,dev,tracing,optimization]",
+]
+
+[project.urls]
+Homepage = "https://github.com/yotambraun/flowprompt"
+Documentation = "https://flowprompt.readthedocs.io"
+Repository = "https://github.com/yotambraun/flowprompt"
+Changelog = "https://github.com/yotambraun/flowprompt/blob/main/CHANGELOG.md"
+Issues = "https://github.com/yotambraun/flowprompt/issues"
+"Source Code" = "https://github.com/yotambraun/flowprompt"
+
+[project.scripts]
+flowprompt = "flowprompt.cli.main:main"
+
+# Hatchling build configuration
+[tool.hatch.build.targets.wheel]
+packages = ["src/flowprompt"]
+
+[tool.hatch.version]
+path = "src/flowprompt/__init__.py"
+
+# Ruff configuration (replaces Black, isort, flake8)
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "ARG", # flake8-unused-arguments
+    "SIM", # flake8-simplify
+]
+ignore = [
+    "E501",  # line too long (handled by formatter)
+    "B008",  # function call in argument defaults (common in FastAPI/Pydantic)
+    "W191",  # indentation contains tabs
+]
+fixable = ["ALL"]
+unfixable = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+[tool.ruff.lint.isort]
+known-first-party = ["flowprompt"]
+
+# Pytest configuration
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+addopts = [
+    "--cov=flowprompt",
+    "--cov-report=html",
+    "--cov-report=term-missing",
+    "--cov-report=xml",
+    "-v",
+    "--strict-markers",
+    "--tb=short",
+]
+asyncio_mode = "auto"
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+]
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["src"]
+branch = true
+omit = [
+    "*/tests/*",
+    "*/__pycache__/*",
+    "*/.venv/*",
+    "*/site-packages/*",
+]
+
+[tool.coverage.report]
+precision = 2
+show_missing = true
+skip_covered = false
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "def __str__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "@abstractmethod",
+    "@overload",
+]
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+# Mypy configuration - simplified for faster checks
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = false
+warn_unused_configs = true
+disallow_untyped_defs = false
+check_untyped_defs = true
+no_implicit_optional = true
+warn_redundant_casts = false
+warn_unused_ignores = false
+show_error_codes = true
+pretty = true
+
+[[tool.mypy.overrides]]
+module = [
+    "litellm.*",
+    "typer.*",
+]
+ignore_missing_imports = true
+
+[dependency-groups]
+dev = [
+    "types-pyyaml>=6.0.12.20250915",
+]
