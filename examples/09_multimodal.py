@@ -20,7 +20,6 @@ from flowprompt.multimodal import (
     VisionPrompt,
 )
 
-
 # =============================================================================
 # Section 1: Image Content Types
 # =============================================================================
@@ -211,7 +210,7 @@ def demonstrate_document_content() -> None:
     doc = DocumentContent.from_text(
         "This is the document content...",
     )
-    print(f"     Created document with text content")
+    print("     Created document with text content")
     print(f"     Page count: {doc.page_count}")
 
     # Supported formats

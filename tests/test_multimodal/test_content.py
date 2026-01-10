@@ -1,8 +1,6 @@
 """Tests for multimodal content types."""
 
 import base64
-import tempfile
-from pathlib import Path
 
 import pytest
 
@@ -288,4 +286,4 @@ class TestDocumentContent:
         doc = DocumentContent.from_text("Hello, world!")
         size = doc.get_size_bytes()
 
-        assert size == len("Hello, world!".encode())
+        assert size == len(b"Hello, world!")

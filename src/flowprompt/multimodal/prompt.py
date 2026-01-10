@@ -10,7 +10,7 @@ Extends the base Prompt class to support:
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, ClassVar, Generic, TypeVar, cast
+from typing import Any, Generic, TypeVar
 
 from pydantic import BaseModel, ConfigDict, model_validator
 
@@ -19,7 +19,6 @@ from flowprompt.multimodal.content import (
     AudioContent,
     DocumentContent,
     ImageContent,
-    MultimodalContent,
     VideoContent,
 )
 

@@ -18,11 +18,9 @@ from flowprompt.testing import (
     ExperimentStatus,
     VariantConfig,
     create_simple_experiment,
-    run_significance_test,
     two_proportion_z_test,
 )
 from flowprompt.testing.experiment import VariantStats
-
 
 # =============================================================================
 # Section 1: Define prompt variants to compare
@@ -141,8 +139,8 @@ def create_experiment_simple() -> tuple[ExperimentConfig, ABTestRunner]:
     )
 
     print(f"  Experiment ID: {config.id}")
-    print(f"  Control: control")
-    print(f"  Treatments: v2, v3")
+    print("  Control: control")
+    print("  Treatments: v2, v3")
 
     return config, runner
 
@@ -262,8 +260,9 @@ def demonstrate_statistical_analysis() -> None:
 
     for _ in range(100):
         # Control: 72% success rate
-        from flowprompt.testing.experiment import ExperimentResult
         from datetime import datetime
+
+        from flowprompt.testing.experiment import ExperimentResult
 
         control_result = ExperimentResult(
             experiment_id="demo",

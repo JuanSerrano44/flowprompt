@@ -1,15 +1,11 @@
 """Tests for multimodal prompts."""
 
-import base64
 
-import pytest
 from pydantic import BaseModel
 
 from flowprompt.multimodal.content import (
     DocumentContent,
-    DocumentFormat,
     ImageContent,
-    ImageFormat,
 )
 from flowprompt.multimodal.prompt import (
     DocumentPrompt,

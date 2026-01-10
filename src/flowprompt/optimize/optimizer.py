@@ -9,12 +9,12 @@ Provides DSPy-style optimization with:
 
 from __future__ import annotations
 
-import copy
 import json
 import random
 from abc import ABC, abstractmethod
+from collections.abc import Callable
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any, Callable, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from pydantic import BaseModel
 
@@ -25,7 +25,7 @@ from flowprompt.optimize.examples import (
     ExampleSelector,
     format_examples_for_prompt,
 )
-from flowprompt.optimize.metrics import Metric, MetricResult
+from flowprompt.optimize.metrics import Metric
 
 if TYPE_CHECKING:
     from flowprompt.core.prompt import Prompt

@@ -31,6 +31,14 @@ Example:
 """
 
 # Metrics
+# Examples
+from flowprompt.optimize.examples import (
+    Example,
+    ExampleBootstrapper,
+    ExampleDataset,
+    ExampleSelector,
+    format_examples_for_prompt,
+)
 from flowprompt.optimize.metrics import (
     CompositeMetric,
     ContainsMatch,
@@ -41,15 +49,6 @@ from flowprompt.optimize.metrics import (
     MetricResult,
     RegexMatch,
     StructuredAccuracy,
-)
-
-# Examples
-from flowprompt.optimize.examples import (
-    Example,
-    ExampleBootstrapper,
-    ExampleDataset,
-    ExampleSelector,
-    format_examples_for_prompt,
 )
 
 # Optimizers

@@ -1,15 +1,14 @@
 """Tests for prompt optimizers."""
 
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import patch
 
 import pytest
 from pydantic import BaseModel
 
 from flowprompt.core.prompt import Prompt
 from flowprompt.optimize.examples import Example, ExampleDataset
-from flowprompt.optimize.metrics import ExactMatch, Metric, MetricResult
+from flowprompt.optimize.metrics import ExactMatch
 from flowprompt.optimize.optimizer import (
-    BaseOptimizer,
     BootstrapOptimizer,
     FewShotOptimizer,
     InstructionOptimizer,
@@ -427,8 +426,8 @@ class TestOptunaOptimizer:
 
     def test_optimize_without_optuna_raises_error(self):
         """Test that optimizer raises error when Optuna not installed."""
-        import sys
         import builtins
+        import sys
 
         optimizer = OptunaOptimizer()
         dataset = ExampleDataset([Example(input={"text": "test"}, output="result")])

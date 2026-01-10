@@ -14,15 +14,13 @@ from pydantic import BaseModel, Field
 
 from flowprompt import Prompt
 from flowprompt.optimize import (
+    ExactMatch,
     Example,
     ExampleDataset,
-    ExactMatch,
     F1Score,
     FewShotOptimizer,
     OptimizationConfig,
-    optimize,
 )
-
 
 # =============================================================================
 # Section 1: Define a prompt to optimize
@@ -238,7 +236,7 @@ def demonstrate_dataset_operations() -> None:
 
     # Sample examples
     samples = dataset.sample(n=3, seed=42)
-    print(f"\n  Random sample (n=3):")
+    print("\n  Random sample (n=3):")
     for sample in samples:
         print(f"    - {sample.input['text'][:40]}...")
 

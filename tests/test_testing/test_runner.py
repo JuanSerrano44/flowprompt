@@ -1,12 +1,11 @@
 """Tests for A/B test runner."""
 
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import patch
 
 import pytest
 from pydantic import BaseModel
 
 from flowprompt.core.prompt import Prompt
-from flowprompt.testing.allocation import RandomAllocator
 from flowprompt.testing.experiment import (
     AllocationStrategy,
     ExperimentConfig,

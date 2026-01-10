@@ -38,16 +38,6 @@ Example:
 """
 
 # Experiment configuration
-from flowprompt.testing.experiment import (
-    AllocationStrategy,
-    ExperimentConfig,
-    ExperimentResult,
-    ExperimentStatus,
-    ExperimentStore,
-    VariantConfig,
-    VariantStats,
-)
-
 # Traffic allocation
 from flowprompt.testing.allocation import (
     EpsilonGreedyAllocator,
@@ -59,6 +49,22 @@ from flowprompt.testing.allocation import (
     WeightedAllocator,
     get_allocator,
 )
+from flowprompt.testing.experiment import (
+    AllocationStrategy,
+    ExperimentConfig,
+    ExperimentResult,
+    ExperimentStatus,
+    ExperimentStore,
+    VariantConfig,
+    VariantStats,
+)
+
+# Runner
+from flowprompt.testing.runner import (
+    ABTestRunner,
+    ExperimentSummary,
+    create_simple_experiment,
+)
 
 # Statistical analysis
 from flowprompt.testing.statistics import (
@@ -68,13 +74,6 @@ from flowprompt.testing.statistics import (
     run_significance_test,
     t_test_means,
     two_proportion_z_test,
-)
-
-# Runner
-from flowprompt.testing.runner import (
-    ABTestRunner,
-    ExperimentSummary,
-    create_simple_experiment,
 )
 
 __all__ = [

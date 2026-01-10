@@ -2,6 +2,7 @@
 
 import pytest
 
+from flowprompt.testing.experiment import VariantStats
 from flowprompt.testing.statistics import (
     StatisticalResult,
     bayesian_ab_test,
@@ -10,7 +11,6 @@ from flowprompt.testing.statistics import (
     t_test_means,
     two_proportion_z_test,
 )
-from flowprompt.testing.experiment import VariantStats
 
 
 def create_stats(samples: int, successes: int, mean_metric: float = None, std_metric: float = 0.0) -> VariantStats:

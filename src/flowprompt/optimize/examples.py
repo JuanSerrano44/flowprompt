@@ -10,14 +10,14 @@ from __future__ import annotations
 
 import json
 import random
+from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, Any, Callable, Generic, Sequence, TypeVar
+from typing import TYPE_CHECKING, Any, Generic, TypeVar
 
 from pydantic import BaseModel
 
 if TYPE_CHECKING:
-    from flowprompt.core.prompt import Prompt
-    from flowprompt.optimize.metrics import Metric
+    pass
 
 
 T = TypeVar("T")

@@ -10,12 +10,11 @@ Provides type-safe representations for:
 from __future__ import annotations
 
 import base64
-import mimetypes
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Any, BinaryIO
+from typing import Any
 
 
 class ContentType(str, Enum):

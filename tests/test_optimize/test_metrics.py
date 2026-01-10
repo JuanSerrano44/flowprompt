@@ -9,7 +9,6 @@ from flowprompt.optimize.metrics import (
     CustomMetric,
     ExactMatch,
     F1Score,
-    Metric,
     MetricResult,
     RegexMatch,
     StructuredAccuracy,
