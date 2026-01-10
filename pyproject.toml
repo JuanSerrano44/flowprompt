@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "flowprompt"
-version = "0.1.0"
+version = "0.2.0"
 description = "Type-safe prompt management with automatic optimization for LLMs"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -94,8 +94,13 @@ optimization = [
     "optuna>=3.5.0",
 ]
 
+multimodal = [
+    "opencv-python>=4.8.0",
+    "pypdf>=3.15.0",
+]
+
 all = [
-    "flowprompt[cli,dev,tracing,optimization]",
+    "flowprompt[cli,dev,tracing,optimization,multimodal]",
 ]
 
 [project.urls]
@@ -220,6 +225,12 @@ module = [
     "litellm.*",
     "typer.*",
     "opentelemetry.*",
+    "optuna.*",
+    "cv2.*",
+    "pypdf.*",
+    "fitz.*",
+    "docx.*",
+    "bs4.*",
 ]
 ignore_missing_imports = true
 

@@ -2,28 +2,28 @@
 
 This document tracks remaining features and improvements planned for FlowPrompt.
 
-## High Priority
+## Completed in v0.2.0
 
 ### Automatic Optimization (DSPy-style)
-- [ ] Implement prompt optimization framework
-- [ ] Add automatic few-shot example selection
-- [ ] Support metric-driven prompt tuning
-- [ ] Integrate with Optuna for hyperparameter search
-- [ ] Add bootstrapping for self-improvement
+- [x] Implement prompt optimization framework
+- [x] Add automatic few-shot example selection
+- [x] Support metric-driven prompt tuning
+- [x] Integrate with Optuna for hyperparameter search
+- [x] Add bootstrapping for self-improvement
 
 ### A/B Testing Framework
-- [ ] Create experiment configuration system
-- [ ] Implement traffic splitting logic
-- [ ] Add statistical significance testing
-- [ ] Build results dashboard/reporting
-- [ ] Support multi-armed bandit algorithms
+- [x] Create experiment configuration system
+- [x] Implement traffic splitting logic
+- [x] Add statistical significance testing
+- [x] Build results dashboard/reporting
+- [x] Support multi-armed bandit algorithms
 
 ### Multimodal Support
-- [ ] Image input support (vision models)
-- [ ] Audio input/output support
-- [ ] Video frame extraction and analysis
-- [ ] Document/PDF processing
-- [ ] Multi-image conversations
+- [x] Image input support (vision models)
+- [x] Audio input/output support
+- [x] Video frame extraction and analysis
+- [x] Document/PDF processing
+- [x] Multi-image conversations
 
 ## Medium Priority
 

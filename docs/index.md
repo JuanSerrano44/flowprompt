@@ -40,9 +40,15 @@ print(result.age)   # 25
 
 ## Documentation Sections
 
+### Getting Started
 - [Installation](installation.md) - How to install FlowPrompt
 - [Quick Start](quickstart.md) - Get up and running in 5 minutes
+
+### Core Features
 - [API Reference](api.md) - Detailed API documentation
+- [Optimization](optimization.md) - Automatic prompt improvement with DSPy-style optimization
+- [A/B Testing](ab-testing.md) - Production experimentation framework
+- [Multimodal](multimodal.md) - Working with images, documents, audio, and video
 
 ## Getting Help
 

@@ -218,6 +218,481 @@ class MyPrompt(Prompt):
 
 ---
 
+## Optimization
+
+### optimize()
+
+Optimize a prompt using a dataset and metric.
+
+```python
+from flowprompt.optimize import optimize, ExampleDataset, Example, ExactMatch
+
+dataset = ExampleDataset([
+    Example(input={"text": "John is 25"}, output={"name": "John", "age": 25}),
+])
+
+result = optimize(
+    MyPrompt,
+    dataset=dataset,
+    metric=ExactMatch(),
+    strategy="fewshot",  # or "instruction", "optuna", "bootstrap"
+    model="gpt-4o"
+)
+
+OptimizedPrompt = result.best_prompt_class
+```
+
+**Parameters:**
+- `prompt_class` (type[Prompt]): Prompt class to optimize
+- `dataset` (ExampleDataset): Training/evaluation examples
+- `metric` (Metric): Metric to optimize for
+- `model` (str): Model to use for evaluation
+- `strategy` (str): Optimization strategy
+- `config` (OptimizationConfig, optional): Configuration options
+
+**Returns:** `OptimizationResult` with the optimized prompt.
+
+### Metrics
+
+#### ExactMatch
+
+Exact string match metric.
+
+```python
+from flowprompt.optimize import ExactMatch
+
+metric = ExactMatch(case_sensitive=True, strip=True)
+```
+
+#### F1Score
+
+Token-level F1 score.
+
+```python
+from flowprompt.optimize import F1Score
+
+metric = F1Score()
+```
+
+#### StructuredAccuracy
+
+Field-level accuracy for structured outputs.
+
+```python
+from flowprompt.optimize import StructuredAccuracy
+
+metric = StructuredAccuracy(fields=["name", "age"])
+```
+
+#### ContainsMatch
+
+Check if output contains expected substring.
+
+```python
+from flowprompt.optimize import ContainsMatch
+
+metric = ContainsMatch(case_sensitive=False)
+```
+
+#### RegexMatch
+
+Check if output matches regex pattern.
+
+```python
+from flowprompt.optimize import RegexMatch
+import re
+
+metric = RegexMatch(r"\d{3}-\d{4}", flags=re.IGNORECASE)
+```
+
+#### CustomMetric
+
+Create custom metrics.
+
+```python
+from flowprompt.optimize import CustomMetric
+
+def my_metric(predictions, ground_truth):
+    return sum(p == gt for p, gt in zip(predictions, ground_truth)) / len(predictions)
+
+metric = CustomMetric("my_metric", my_metric)
+```
+
+#### CompositeMetric
+
+Combine multiple metrics with weights.
+
+```python
+from flowprompt.optimize import CompositeMetric, ExactMatch, F1Score
+
+metric = CompositeMetric([
+    (ExactMatch(), 0.6),
+    (F1Score(), 0.4),
+])
+```
+
+### ExampleDataset
+
+Dataset container for optimization.
+
+```python
+from flowprompt.optimize import ExampleDataset, Example
+
+dataset = ExampleDataset([
+    Example(
+        input={"text": "John is 25"},
+        output={"name": "John", "age": 25}
+    ),
+])
+
+# Split into train/test
+train, test = dataset.split(train_ratio=0.7, seed=42)
+```
+
+### Optimizers
+
+#### FewShotOptimizer
+
+Optimizes few-shot example selection.
+
+```python
+from flowprompt.optimize import FewShotOptimizer
+
+optimizer = FewShotOptimizer(
+    num_examples=3,
+    selection_strategy="bootstrap"  # or "random", "diverse", "similar"
+)
+result = optimizer.optimize(MyPrompt, dataset, metric, model="gpt-4o")
+```
+
+#### InstructionOptimizer
+
+Optimizes prompt instructions using LLM feedback.
+
+```python
+from flowprompt.optimize import InstructionOptimizer
+
+optimizer = InstructionOptimizer(
+    optimizer_model="gpt-4o",
+    num_candidates=5
+)
+result = optimizer.optimize(MyPrompt, dataset, metric)
+```
+
+#### OptunaOptimizer
+
+Hyperparameter optimization using Optuna.
+
+```python
+from flowprompt.optimize import OptunaOptimizer
+
+optimizer = OptunaOptimizer(n_trials=50, timeout=600)
+result = optimizer.optimize(MyPrompt, dataset, metric)
+```
+
+#### BootstrapOptimizer
+
+Self-improvement through bootstrapping.
+
+```python
+from flowprompt.optimize import BootstrapOptimizer
+
+optimizer = BootstrapOptimizer(
+    bootstrap_rounds=3,
+    confidence_threshold=0.8
+)
+result = optimizer.optimize(MyPrompt, dataset, metric)
+```
+
+---
+
+## A/B Testing
+
+### ABTestRunner
+
+Main class for running A/B test experiments.
+
+```python
+from flowprompt.testing import ABTestRunner, ExperimentConfig, VariantConfig
+
+runner = ABTestRunner()
+runner.register_prompt("control", ControlPrompt)
+runner.register_prompt("treatment", TreatmentPrompt)
+
+config = ExperimentConfig(
+    name="prompt_test",
+    variants=[
+        VariantConfig(name="control", prompt_class="control", is_control=True),
+        VariantConfig(name="treatment", prompt_class="treatment"),
+    ],
+    min_samples=100,
+    confidence_level=0.95,
+)
+
+runner.create_experiment(config)
+runner.start_experiment(config.id)
+```
+
+**Methods:**
+
+#### create_experiment(config)
+
+Create a new experiment.
+
+#### start_experiment(experiment_id)
+
+Start running an experiment.
+
+#### get_variant(experiment_id, user_id, context)
+
+Get the allocated variant for a request.
+
+#### run_prompt(experiment_id, variant_name, input_data, ...)
+
+Run a prompt and record the result.
+
+#### get_summary(experiment_id, test_type)
+
+Get statistical summary of results.
+
+```python
+summary = runner.get_summary(config.id)
+print(summary.summary_text())
+```
+
+### ExperimentConfig
+
+Configuration for an A/B test experiment.
+
+**Fields:**
+- `name` (str): Experiment name
+- `variants` (list[VariantConfig]): Variant configurations
+- `allocation_strategy` (AllocationStrategy): Traffic allocation strategy
+- `min_samples` (int): Minimum samples before analysis
+- `max_samples` (int, optional): Maximum samples before auto-completion
+- `confidence_level` (float): Confidence level for significance (default 0.95)
+
+### VariantConfig
+
+Configuration for a single variant.
+
+**Fields:**
+- `name` (str): Variant name
+- `prompt_class` (str): Prompt class name
+- `model` (str, optional): Model to use
+- `temperature` (float, optional): Temperature setting
+- `is_control` (bool): Whether this is the control variant
+
+### AllocationStrategy
+
+Traffic allocation strategies:
+
+- `RANDOM`: Random allocation
+- `ROUND_ROBIN`: Round-robin allocation
+- `WEIGHTED`: Weighted allocation
+- `EPSILON_GREEDY`: Epsilon-greedy (exploration/exploitation)
+- `UCB`: Upper Confidence Bound
+- `THOMPSON_SAMPLING`: Bayesian Thompson sampling
+
+---
+
+## Multimodal
+
+### MultimodalPrompt
+
+Base class for prompts with multimodal content.
+
+```python
+from flowprompt.multimodal import MultimodalPrompt, ImageContent
+from pydantic import BaseModel
+
+class ImageAnalyzer(MultimodalPrompt):
+    system = "Analyze images in detail."
+    user = "What do you see?"
+
+    class Output(BaseModel):
+        description: str
+        objects: list[str]
+
+result = ImageAnalyzer(
+    images=[ImageContent.from_file("photo.jpg")]
+).run(model="gpt-4o")
+```
+
+**Methods:**
+
+#### add_image(image, detail)
+
+Add an image to the prompt.
+
+```python
+prompt = prompt.add_image("photo.jpg", detail="high")
+```
+
+#### add_document(document, extract_images)
+
+Add a document to the prompt.
+
+```python
+prompt = prompt.add_document("report.pdf", extract_images=True)
+```
+
+#### with_audio(audio)
+
+Set audio content.
+
+```python
+prompt = prompt.with_audio("recording.mp3")
+```
+
+#### with_video(video, frame_interval, max_frames)
+
+Set video content.
+
+```python
+prompt = prompt.with_video("video.mp4", frame_interval=1.0, max_frames=10)
+```
+
+### VisionPrompt
+
+Specialized prompt for vision/image tasks.
+
+```python
+from flowprompt.multimodal import VisionPrompt
+
+class Analyzer(VisionPrompt):
+    system = "You are an image expert."
+    user = "Describe this image."
+
+result = Analyzer().with_image("photo.jpg").run(model="gpt-4o")
+```
+
+**Class Methods:**
+
+#### VisionPrompt.describe(image, detail_level)
+
+Create a prompt to describe an image.
+
+```python
+result = VisionPrompt.describe("photo.jpg", detail_level="comprehensive").run(model="gpt-4o")
+```
+
+#### VisionPrompt.compare(images, comparison_type)
+
+Create a prompt to compare images.
+
+```python
+result = VisionPrompt.compare(
+    ["before.jpg", "after.jpg"],
+    comparison_type="differences"
+).run(model="gpt-4o")
+```
+
+### DocumentPrompt
+
+Specialized prompt for document analysis.
+
+```python
+from flowprompt.multimodal import DocumentPrompt
+
+class Summarizer(DocumentPrompt):
+    system = "Summarize documents."
+    user = "What are the key points?"
+
+result = Summarizer().with_document("report.pdf").run(model="gpt-4o")
+```
+
+**Class Methods:**
+
+#### DocumentPrompt.summarize(document, length)
+
+Create a prompt to summarize a document.
+
+```python
+result = DocumentPrompt.summarize("report.pdf", length="brief").run(model="gpt-4o")
+```
+
+#### DocumentPrompt.extract_info(document, info_type)
+
+Extract specific information from a document.
+
+```python
+result = DocumentPrompt.extract_info(
+    "contract.pdf",
+    info_type="dates"
+).run(model="gpt-4o")
+```
+
+### ImageContent
+
+Image content handler.
+
+```python
+from flowprompt.multimodal import ImageContent
+
+# From file
+image = ImageContent.from_file("photo.jpg", detail="high")
+
+# From URL
+image = ImageContent.from_url("https://example.com/image.jpg")
+
+# From base64
+image = ImageContent.from_base64(b64_string, format="png")
+```
+
+### DocumentContent
+
+Document content handler.
+
+```python
+from flowprompt.multimodal import DocumentContent
+
+# From file (PDF, DOCX, TXT)
+doc = DocumentContent.from_file("report.pdf", extract_images=True, max_pages=20)
+
+# Access extracted text
+print(doc.text)
+
+# Access page images
+for page_img in doc.pages:
+    print(page_img.to_message_content())
+```
+
+### AudioContent
+
+Audio content handler.
+
+```python
+from flowprompt.multimodal import AudioContent
+
+# From file
+audio = AudioContent.from_file("recording.mp3")
+
+# From URL
+audio = AudioContent.from_url("https://example.com/audio.mp3")
+```
+
+### VideoContent
+
+Video content handler.
+
+```python
+from flowprompt.multimodal import VideoContent
+
+# From file with frame extraction
+video = VideoContent.from_file(
+    "video.mp4",
+    frame_interval=1.0,  # Extract frame every 1 second
+    max_frames=10
+)
+
+# Frames are converted to ImageContent
+for frame in video.frames:
+    print(frame)
+```
+
+---
+
 ## CLI Commands
 
 ### flowprompt init

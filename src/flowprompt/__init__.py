@@ -6,6 +6,9 @@ FlowPrompt combines Pydantic's type safety with powerful features:
 - OpenTelemetry tracing for observability
 - YAML/JSON prompt loading for collaboration
 - Multi-provider support via LiteLLM
+- **NEW in v0.2.0**: Automatic optimization (DSPy-style)
+- **NEW in v0.2.0**: A/B testing framework
+- **NEW in v0.2.0**: Multimodal support (images, audio, documents)
 
 Example:
     >>> from flowprompt import Prompt, Field
@@ -37,9 +40,23 @@ Tracing:
 YAML Loading:
     >>> from flowprompt import load_prompt, load_prompts
     >>> MyPrompt = load_prompt("prompts/my_prompt.yaml")
+
+Optimization (NEW in v0.2.0):
+    >>> from flowprompt.optimize import optimize, ExampleDataset, Example, ExactMatch
+    >>> dataset = ExampleDataset([Example(input={"text": "John is 25"}, output="John, 25")])
+    >>> result = optimize(MyPrompt, dataset=dataset, metric=ExactMatch())
+
+A/B Testing (NEW in v0.2.0):
+    >>> from flowprompt.testing import ABTestRunner, create_simple_experiment
+    >>> config, runner = create_simple_experiment("test", PromptV1, [("v2", PromptV2)])
+    >>> runner.start_experiment(config.id)
+
+Multimodal (NEW in v0.2.0):
+    >>> from flowprompt.multimodal import VisionPrompt
+    >>> result = VisionPrompt.describe("image.jpg").run(model="gpt-4o")
 """
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 # Core
 # Caching
@@ -109,3 +126,10 @@ __all__ = [
     "load_prompt",
     "load_prompts",
 ]
+
+# Note: The following modules are available but not imported at the top level
+# to keep imports fast. Import them explicitly when needed:
+#
+# - flowprompt.optimize: Automatic prompt optimization
+# - flowprompt.testing: A/B testing framework
+# - flowprompt.multimodal: Multimodal support (images, audio, documents)
