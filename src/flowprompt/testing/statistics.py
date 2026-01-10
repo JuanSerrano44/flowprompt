@@ -11,8 +11,8 @@ Provides statistical significance testing:
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass, field
 from collections.abc import Callable
+from dataclasses import dataclass, field
 from typing import Any
 
 from flowprompt.testing.experiment import VariantStats
