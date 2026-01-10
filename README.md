@@ -2,10 +2,10 @@
 
 **Type-safe prompt management with automatic optimization for LLMs**
 
-[![PyPI](https://img.shields.io/pypi/v/flowprompt.svg)](https://pypi.org/project/flowprompt/)
-[![Downloads](https://static.pepy.tech/badge/flowprompt)](https://pepy.tech/project/flowprompt)
-[![Downloads/Month](https://static.pepy.tech/badge/flowprompt/month)](https://pepy.tech/project/flowprompt)
-[![Python](https://img.shields.io/pypi/pyversions/flowprompt.svg)](https://pypi.org/project/flowprompt/)
+[![PyPI](https://img.shields.io/pypi/v/flowprompt-ai.svg)](https://pypi.org/project/flowprompt-ai/)
+[![Downloads](https://static.pepy.tech/badge/flowprompt-ai)](https://pepy.tech/project/flowprompt-ai)
+[![Downloads/Month](https://static.pepy.tech/badge/flowprompt-ai/month)](https://pepy.tech/project/flowprompt-ai)
+[![Python](https://img.shields.io/pypi/pyversions/flowprompt-ai.svg)](https://pypi.org/project/flowprompt-ai/)
 [![License](https://img.shields.io/pypi/l/flowprompt.svg)](https://github.com/yotambraun/flowprompt/blob/main/LICENSE)
 [![Tests](https://github.com/yotambraun/flowprompt/workflows/CI/badge.svg)](https://github.com/yotambraun/flowprompt/actions)
 [![codecov](https://codecov.io/gh/yotambraun/flowprompt/graph/badge.svg?token=3IDNOYK3D3)](https://codecov.io/gh/yotambraun/flowprompt)
@@ -42,16 +42,18 @@ print(result.age)   # 25
 ## Installation
 
 ```bash
-pip install flowprompt
+pip install flowprompt-ai
 ```
+
+> **Note:** The package is installed as `flowprompt-ai` but imported as `flowprompt`
 
 **Optional extras:**
 
 ```bash
-pip install flowprompt[all]        # Everything
-pip install flowprompt[cli]        # CLI tools
-pip install flowprompt[tracing]    # OpenTelemetry support
-pip install flowprompt[multimodal] # Images, PDFs, audio, video
+pip install flowprompt-ai[all]        # Everything
+pip install flowprompt-ai[cli]        # CLI tools
+pip install flowprompt-ai[tracing]    # OpenTelemetry support
+pip install flowprompt-ai[multimodal] # Images, PDFs, audio, video
 ```
 
 ---
@@ -344,4 +346,4 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 **Made with care by [Yotam Braun](https://github.com/yotambraun)**
 
-[GitHub](https://github.com/yotambraun/flowprompt) | [PyPI](https://pypi.org/project/flowprompt/) | [Issues](https://github.com/yotambraun/flowprompt/issues)
+[GitHub](https://github.com/yotambraun/flowprompt) | [PyPI](https://pypi.org/project/flowprompt-ai/) | [Issues](https://github.com/yotambraun/flowprompt/issues)
