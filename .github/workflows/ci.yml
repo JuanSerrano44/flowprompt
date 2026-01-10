@@ -29,7 +29,7 @@ jobs:
       - name: Install dependencies
         run: |
           uv venv
-          uv pip install -e ".[dev]"
+          uv sync --all-extras
 
       - name: Run tests
         run: uv run pytest --cov --cov-report=xml -v
@@ -57,7 +57,7 @@ jobs:
       - name: Install dependencies
         run: |
           uv venv
-          uv pip install -e ".[dev]"
+          uv sync --all-extras
 
       - name: Run ruff check
         run: uv run ruff check .
@@ -86,7 +86,8 @@ jobs:
 
       - name: Check distribution
         run: |
-          uv pip install twine
+          uv venv
+          uv run pip install twine
           uv run twine check dist/*
 
       - name: Upload build artifacts
