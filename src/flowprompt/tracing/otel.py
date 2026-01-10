@@ -211,9 +211,7 @@ class Tracer:
                 try:
                     from opentelemetry import trace
 
-                    otel_span.set_status(
-                        trace.Status(trace.StatusCode.ERROR, str(e))
-                    )
+                    otel_span.set_status(trace.Status(trace.StatusCode.ERROR, str(e)))
                 except ImportError:
                     pass
             raise
@@ -222,9 +220,15 @@ class Tracer:
             if otel_span:
                 # Add usage info to OTel span
                 if context.usage:
-                    otel_span.set_attribute("llm.prompt_tokens", context.usage.prompt_tokens)
-                    otel_span.set_attribute("llm.completion_tokens", context.usage.completion_tokens)
-                    otel_span.set_attribute("llm.total_tokens", context.usage.total_tokens)
+                    otel_span.set_attribute(
+                        "llm.prompt_tokens", context.usage.prompt_tokens
+                    )
+                    otel_span.set_attribute(
+                        "llm.completion_tokens", context.usage.completion_tokens
+                    )
+                    otel_span.set_attribute(
+                        "llm.total_tokens", context.usage.total_tokens
+                    )
                     otel_span.set_attribute("llm.cost_usd", context.usage.cost_usd)
                     otel_span.set_attribute("llm.model", context.usage.model)
                     otel_span.set_attribute("llm.cached", context.usage.cached)

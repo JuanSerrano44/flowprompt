@@ -135,7 +135,9 @@ def create_app() -> Any:
 
     @app.command()
     def list_prompts(
-        prompts_dir: str = Option("prompts", "--dir", help="Directory containing prompts"),
+        prompts_dir: str = Option(
+            "prompts", "--dir", help="Directory containing prompts"
+        ),
     ) -> None:
         """List all available prompts."""
         from flowprompt.storage.yaml_loader import PromptConfig
@@ -148,7 +150,9 @@ def create_app() -> Any:
         typer.echo("Available prompts:")
         typer.echo("-" * 60)
 
-        for path in sorted(prompts_path.glob("*.yaml")) + sorted(prompts_path.glob("*.yml")):
+        for path in sorted(prompts_path.glob("*.yaml")) + sorted(
+            prompts_path.glob("*.yml")
+        ):
             try:
                 config = PromptConfig.from_file(path)
                 typer.echo(f"  {config.name:<20} v{config.version:<10} {path.name}")

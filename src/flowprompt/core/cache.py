@@ -115,7 +115,9 @@ class MemoryCache(CacheBackend):
     def set(self, key: str, entry: CacheEntry) -> None:
         # Evict oldest entries if at capacity
         if self._max_size and len(self._cache) >= self._max_size:
-            oldest_key = min(self._cache.keys(), key=lambda k: self._cache[k].created_at)
+            oldest_key = min(
+                self._cache.keys(), key=lambda k: self._cache[k].created_at
+            )
             del self._cache[oldest_key]
         self._cache[key] = entry
 
