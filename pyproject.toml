@@ -100,7 +100,7 @@ multimodal = [
 ]
 
 all = [
-    "flowprompt[cli,dev,tracing,optimization,multimodal]",
+    "flowprompt-ai[cli,dev,tracing,optimization,multimodal]",
 ]
 
 [project.urls]
