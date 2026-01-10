@@ -98,9 +98,7 @@ class ExperimentSummary:
 
         for name, stats in self.variant_stats.items():
             variant = self.experiment.get_variant(name)
-            control_marker = (
-                " (control)" if variant and variant.is_control else ""
-            )
+            control_marker = " (control)" if variant and variant.is_control else ""
             lines.append(
                 f"  {name}{control_marker}: "
                 f"n={stats.samples}, "

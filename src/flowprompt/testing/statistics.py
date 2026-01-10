@@ -18,7 +18,9 @@ from typing import Any
 from flowprompt.testing.experiment import VariantStats
 
 # Type alias for significance test functions
-SignificanceTestFunc = Callable[[VariantStats, VariantStats, float], "StatisticalResult"]
+SignificanceTestFunc = Callable[
+    [VariantStats, VariantStats, float], "StatisticalResult"
+]
 
 
 @dataclass
