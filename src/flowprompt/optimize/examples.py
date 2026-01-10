@@ -277,8 +277,8 @@ class ExampleSelector:
         def similarity(ex: Example[Any]) -> float:
             ex_str = str(sorted(ex.input.items())).lower()
             # Jaccard similarity of character n-grams
-            input_ngrams = set(input_str[i : i + 3] for i in range(len(input_str) - 2))
-            ex_ngrams = set(ex_str[i : i + 3] for i in range(len(ex_str) - 2))
+            input_ngrams = {input_str[i : i + 3] for i in range(len(input_str) - 2)}
+            ex_ngrams = {ex_str[i : i + 3] for i in range(len(ex_str) - 2)}
             if not input_ngrams or not ex_ngrams:
                 return 0.0
             intersection = len(input_ngrams & ex_ngrams)
@@ -298,7 +298,7 @@ class ExampleSelector:
 
         # Get performance scores (default to 0.5 for unseen)
         scores = []
-        for i, ex in enumerate(examples):
+        for ex in examples:
             score = self._performance_scores.get(id(ex), 0.5)
             scores.append((ex, score))
 

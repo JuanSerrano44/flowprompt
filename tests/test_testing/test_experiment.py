@@ -351,7 +351,7 @@ class TestExperimentStore:
         store.save_experiment(config)
 
         # Record some results
-        for i in range(5):
+        for _ in range(5):
             store.record_result(ExperimentResult(
                 experiment_id=config.id,
                 variant_name="control",

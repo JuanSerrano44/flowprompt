@@ -430,11 +430,11 @@ class VideoContent(MultimodalContent):
 
         try:
             import cv2
-        except ImportError:
+        except ImportError as err:
             raise ImportError(
                 "opencv-python is required for video frame extraction. "
                 "Install it with: pip install opencv-python"
-            )
+            ) from err
 
         path = Path(self.file_path)
         if not path.exists():
@@ -642,11 +642,11 @@ class DocumentContent(MultimodalContent):
                 self.text = "\n\n".join(text_parts)
                 doc.close()
 
-            except ImportError:
+            except ImportError as err:
                 raise ImportError(
                     "PDF processing requires pypdf or pymupdf. "
                     "Install with: pip install pypdf or pip install pymupdf"
-                )
+                ) from err
 
     def _process_docx(self, path: Path) -> None:
         """Process DOCX document."""
@@ -658,11 +658,11 @@ class DocumentContent(MultimodalContent):
             self.text = "\n\n".join(paragraphs)
             self.page_count = 1  # DOCX doesn't have clear page boundaries
 
-        except ImportError:
+        except ImportError as err:
             raise ImportError(
                 "DOCX processing requires python-docx. "
                 "Install with: pip install python-docx"
-            )
+            ) from err
 
     def _process_html(self, path: Path) -> None:
         """Process HTML document."""

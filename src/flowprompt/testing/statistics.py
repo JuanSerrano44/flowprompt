@@ -682,7 +682,7 @@ def run_significance_test(
         "z_test": two_proportion_z_test,
         "chi_squared": chi_squared_test,
         "t_test": t_test_means,
-        "bayesian": lambda c, t, conf: bayesian_ab_test(c, t),
+        "bayesian": lambda c, t, conf: bayesian_ab_test(c, t),  # noqa: ARG005
     }
 
     if test_type not in tests:

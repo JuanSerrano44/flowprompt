@@ -8,8 +8,7 @@
 [![Python](https://img.shields.io/pypi/pyversions/flowprompt.svg)](https://pypi.org/project/flowprompt/)
 [![License](https://img.shields.io/pypi/l/flowprompt.svg)](https://github.com/yotambraun/flowprompt/blob/main/LICENSE)
 [![Tests](https://github.com/yotambraun/flowprompt/workflows/CI/badge.svg)](https://github.com/yotambraun/flowprompt/actions)
-[![Coverage](https://codecov.io/gh/yotambraun/flowprompt/branch/main/graph/badge.svg)](https://codecov.io/gh/yotambraun/flowprompt)
-
+[![codecov](https://codecov.io/gh/yotambraun/flowprompt/graph/badge.svg?token=3IDNOYK3D3)](https://codecov.io/gh/yotambraun/flowprompt)
 ---
 
 ## Why FlowPrompt?

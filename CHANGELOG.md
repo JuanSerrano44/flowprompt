@@ -8,11 +8,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned
-- Automatic optimization (DSPy-style)
-- A/B testing framework
-- Multimodal support (images/audio/video)
 - Redis cache backend
 - Langfuse integration
+
+## [0.2.0] - 2026-01-10
+
+### Added
+
+#### Prompt Optimization (DSPy-style)
+- **FewShotOptimizer**: Automatic few-shot example selection and optimization
+- **InstructionOptimizer**: LLM-powered instruction refinement
+- **OptunaOptimizer**: Hyperparameter search with Optuna integration
+- **BootstrapOptimizer**: Self-improving bootstrapping optimization
+- **ExampleDataset**: Structured dataset management for optimization
+- **Metrics**: ExactMatch, ContainsMatch, F1Score, StructuredAccuracy, RegexMatch, CustomMetric
+- **Convenience function**: Simple `optimize()` function for quick optimization
+
+#### A/B Testing Framework
+- **ExperimentConfig**: Define A/B experiments with multiple variants
+- **Allocation strategies**: Random, RoundRobin, Weighted, EpsilonGreedy, UCB1, ThompsonSampling
+- **Statistical tests**: Z-test, Chi-squared, T-test, Bayesian A/B testing
+- **ExperimentStore**: Persist and analyze experiment results
+- **Multi-armed bandit support**: Adaptive allocation based on performance
+
+#### Multimodal Support
+- **ImageContent**: Support for base64, URL, and file-based images
+- **VideoContent**: Video frame extraction and processing
+- **DocumentContent**: PDF, DOCX, HTML, and plain text processing
+- **MultimodalPrompt**: Unified prompt class for multimodal inputs
+
+### Fixed
+- Resolved ruff linting errors across the codebase
+- Added proper exception chaining with `from err`
+- Fixed unused variable warnings
+- Added `strict=True` to zip() calls for safety
+- Improved code quality with set comprehensions
 
 ## [0.1.0] - 2026-01-10
 
@@ -77,5 +107,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive test suite
 - Full type annotations
 
-[unreleased]: https://github.com/yotambraun/flowprompt/compare/v0.1.0...HEAD
+[unreleased]: https://github.com/yotambraun/flowprompt/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/yotambraun/flowprompt/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/yotambraun/flowprompt/releases/tag/v0.1.0

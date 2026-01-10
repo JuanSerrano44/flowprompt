@@ -272,7 +272,7 @@ class TestCustomMetric:
 
         def length_similarity(preds, gts):
             scores = []
-            for p, g in zip(preds, gts):
+            for p, g in zip(preds, gts, strict=True):
                 len_diff = abs(len(str(p)) - len(str(g)))
                 scores.append(1 / (1 + len_diff))
             return sum(scores) / len(scores) if scores else 0

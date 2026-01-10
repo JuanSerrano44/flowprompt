@@ -185,8 +185,8 @@ def demonstrate_convenience_function() -> None:
     print("\nUsing optimize() Convenience Function:")
     print("-" * 50)
 
-    dataset = create_dataset()
-    metric = ExactMatch()
+    _ = create_dataset()  # Would be used with actual optimization
+    _ = ExactMatch()  # Would be used with actual optimization
 
     print("  Supported strategies:")
     print("    - 'fewshot': Optimize few-shot example selection")

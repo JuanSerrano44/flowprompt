@@ -325,7 +325,7 @@ class TestExampleBootstrapper:
     def test_validator_function(self):
         """Test custom validator function."""
 
-        def validator(inp, out):
+        def validator(_inp, out):
             return out > 0  # Only accept positive outputs
 
         bootstrapper = ExampleBootstrapper(validate_fn=validator, min_confidence=0.0)

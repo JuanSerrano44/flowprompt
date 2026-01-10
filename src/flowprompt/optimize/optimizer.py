@@ -404,7 +404,7 @@ class InstructionOptimizer(BaseOptimizer):
                 "user": best_user,
             },
             history=history,
-            iterations=len(set(h["iteration"] for h in history)),
+            iterations=len({h["iteration"] for h in history}),
             improvements=sum(
                 1 for i, h in enumerate(history) if i > 0 and h["score"] > best_score * 0.99
             ),
@@ -544,11 +544,11 @@ class OptunaOptimizer(BaseOptimizer):
         """Optimize using Optuna hyperparameter search."""
         try:
             import optuna
-        except ImportError:
+        except ImportError as err:
             raise ImportError(
                 "Optuna is required for OptunaOptimizer. "
                 "Install it with: pip install flowprompt[optimization]"
-            )
+            ) from err
 
         config = config or OptimizationConfig()
 

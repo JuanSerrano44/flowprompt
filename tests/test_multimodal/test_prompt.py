@@ -172,8 +172,9 @@ class TestMultimodalPrompt:
         image_count = sum(1 for c in user_content if c["type"] == "image_url")
         assert image_count == 2
 
-    def test_with_document_text(self, tmp_path):
+    def test_with_document_text(self, tmp_path):  # noqa: ARG002
         """Test prompt with document content."""
+        del tmp_path  # Not used - using from_text instead
         doc = DocumentContent.from_text("This is important text.")
 
         class DocPrompt(MultimodalPrompt):
@@ -313,8 +314,9 @@ class TestDocumentPrompt:
 class TestIntegration:
     """Integration tests for multimodal prompts."""
 
-    def test_combined_image_and_document(self, tmp_path):
+    def test_combined_image_and_document(self, tmp_path):  # noqa: ARG002
         """Test prompt with both image and document."""
+        del tmp_path  # Not used - using from_text and from_url instead
         doc = DocumentContent.from_text("Reference material here.")
         image = ImageContent.from_url("https://example.com/chart.png")
 

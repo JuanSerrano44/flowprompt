@@ -109,7 +109,7 @@ class ExactMatch(Metric):
         correct = 0
         per_example: list[float] = []
 
-        for pred, gt in zip(predictions, ground_truth):
+        for pred, gt in zip(predictions, ground_truth, strict=True):
             pred_str = str(pred)
             gt_str = str(gt)
 
@@ -168,7 +168,7 @@ class ContainsMatch(Metric):
         correct = 0
         per_example: list[float] = []
 
-        for pred, gt in zip(predictions, ground_truth):
+        for pred, gt in zip(predictions, ground_truth, strict=True):
             pred_str = str(pred)
             gt_str = str(gt)
 
@@ -223,7 +223,7 @@ class F1Score(Metric):
 
         f1_scores: list[float] = []
 
-        for pred, gt in zip(predictions, ground_truth):
+        for pred, gt in zip(predictions, ground_truth, strict=True):
             pred_tokens = set(self.tokenizer(str(pred)))
             gt_tokens = set(self.tokenizer(str(gt)))
 
@@ -289,7 +289,7 @@ class StructuredAccuracy(Metric):
         field_scores: dict[str, list[float]] = {}
         overall_scores: list[float] = []
 
-        for pred, gt in zip(predictions, ground_truth):
+        for pred, gt in zip(predictions, ground_truth, strict=True):
             # Convert to dict if Pydantic model
             pred_dict = pred.model_dump() if isinstance(pred, BaseModel) else pred
             gt_dict = gt.model_dump() if isinstance(gt, BaseModel) else gt
@@ -354,9 +354,10 @@ class RegexMatch(Metric):
     def evaluate(
         self,
         predictions: Sequence[Any],
-        ground_truth: Sequence[Any],
+        ground_truth: Sequence[Any],  # noqa: ARG002
     ) -> MetricResult:
         """Evaluate regex match rate."""
+        del ground_truth  # Not used - RegexMatch only validates format
         if not predictions:
             return MetricResult(name=self.name, value=0.0, details="No examples")
 

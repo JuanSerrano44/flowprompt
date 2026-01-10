@@ -84,9 +84,10 @@ class RandomAllocator(TrafficAllocator):
         self,
         experiment: ExperimentConfig,
         user_id: str | None = None,
-        context: dict[str, Any] | None = None,
+        context: dict[str, Any] | None = None,  # noqa: ARG002
     ) -> VariantConfig:
         """Allocate randomly to a variant."""
+        del context  # Not used in random allocation
         if not experiment.variants:
             raise ValueError("Experiment has no variants")
 
@@ -131,10 +132,11 @@ class RoundRobinAllocator(TrafficAllocator):
     def allocate(
         self,
         experiment: ExperimentConfig,
-        user_id: str | None = None,
-        context: dict[str, Any] | None = None,
+        user_id: str | None = None,  # noqa: ARG002
+        context: dict[str, Any] | None = None,  # noqa: ARG002
     ) -> VariantConfig:
         """Allocate using round-robin."""
+        del user_id, context  # Not used in round-robin allocation
         if not experiment.variants:
             raise ValueError("Experiment has no variants")
 
@@ -177,9 +179,10 @@ class WeightedAllocator(TrafficAllocator):
         self,
         experiment: ExperimentConfig,
         user_id: str | None = None,
-        context: dict[str, Any] | None = None,
+        context: dict[str, Any] | None = None,  # noqa: ARG002
     ) -> VariantConfig:
         """Allocate based on weights."""
+        del context  # Not used in weighted allocation
         if not experiment.variants:
             raise ValueError("Experiment has no variants")
 
@@ -269,10 +272,11 @@ class EpsilonGreedyAllocator(TrafficAllocator):
     def allocate(
         self,
         experiment: ExperimentConfig,
-        user_id: str | None = None,
-        context: dict[str, Any] | None = None,
+        user_id: str | None = None,  # noqa: ARG002
+        context: dict[str, Any] | None = None,  # noqa: ARG002
     ) -> VariantConfig:
         """Allocate using epsilon-greedy strategy."""
+        del user_id, context  # Not used in epsilon-greedy
         if not experiment.variants:
             raise ValueError("Experiment has no variants")
 
@@ -336,10 +340,11 @@ class UCBAllocator(TrafficAllocator):
     def allocate(
         self,
         experiment: ExperimentConfig,
-        user_id: str | None = None,
-        context: dict[str, Any] | None = None,
+        user_id: str | None = None,  # noqa: ARG002
+        context: dict[str, Any] | None = None,  # noqa: ARG002
     ) -> VariantConfig:
         """Allocate using UCB1 strategy."""
+        del user_id, context  # Not used in UCB1
         if not experiment.variants:
             raise ValueError("Experiment has no variants")
 
@@ -414,10 +419,11 @@ class ThompsonSamplingAllocator(TrafficAllocator):
     def allocate(
         self,
         experiment: ExperimentConfig,
-        user_id: str | None = None,
-        context: dict[str, Any] | None = None,
+        user_id: str | None = None,  # noqa: ARG002
+        context: dict[str, Any] | None = None,  # noqa: ARG002
     ) -> VariantConfig:
         """Allocate using Thompson Sampling."""
+        del user_id, context  # Not used in Thompson Sampling
         if not experiment.variants:
             raise ValueError("Experiment has no variants")
 

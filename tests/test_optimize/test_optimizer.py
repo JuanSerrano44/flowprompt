@@ -459,7 +459,7 @@ class TestBootstrapOptimizer:
 
     def test_initialization(self):
         """Test optimizer initialization."""
-        def validator(inp, out):
+        def validator(_inp, _out):
             return True
 
         optimizer = BootstrapOptimizer(
@@ -516,7 +516,7 @@ class TestBootstrapOptimizer:
     @patch("flowprompt.optimize.optimizer.FewShotOptimizer.optimize")
     def test_optimize_with_validator(self, mock_fewshot_optimize, mock_evaluate):
         """Test bootstrap optimization with validator function."""
-        def validator(inp, out):
+        def validator(_inp, out):
             return len(str(out)) > 0
 
         optimizer = BootstrapOptimizer(
@@ -684,7 +684,7 @@ class TestOptimizeFunction:
         )
         mock_optimize.return_value = mock_result
 
-        result = optimize(
+        optimize(
             TestPrompt,
             dataset=dataset,
             metric=metric,
