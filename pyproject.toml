@@ -219,6 +219,7 @@ pretty = true
 module = [
     "litellm.*",
     "typer.*",
+    "opentelemetry.*",
 ]
 ignore_missing_imports = true
 
