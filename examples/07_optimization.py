@@ -26,6 +26,7 @@ from flowprompt.optimize import (
 # Section 1: Define a prompt to optimize
 # =============================================================================
 
+
 class ExtractEntityPrompt(Prompt):
     """Extract entities from text.
 
@@ -43,6 +44,7 @@ class ExtractEntityPrompt(Prompt):
 # =============================================================================
 # Section 2: Create a training dataset
 # =============================================================================
+
 
 def create_dataset() -> ExampleDataset:
     """Create a dataset of examples for optimization.
@@ -99,6 +101,7 @@ def create_dataset() -> ExampleDataset:
 # =============================================================================
 # Section 3: Configure and run optimization
 # =============================================================================
+
 
 def demonstrate_metrics() -> None:
     """Show how to use different metrics for evaluation."""

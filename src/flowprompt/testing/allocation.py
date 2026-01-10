@@ -78,7 +78,9 @@ class RandomAllocator(TrafficAllocator):
         """
         self._rng = random.Random(seed)
         self._sticky = sticky
-        self._assignments: dict[tuple[str, str], str] = {}  # (exp_id, user_id) -> variant
+        self._assignments: dict[
+            tuple[str, str], str
+        ] = {}  # (exp_id, user_id) -> variant
 
     def allocate(
         self,
@@ -403,7 +405,9 @@ class ThompsonSamplingAllocator(TrafficAllocator):
     samples to balance exploration and exploitation.
     """
 
-    def __init__(self, prior_alpha: float = 1.0, prior_beta: float = 1.0, seed: int | None = None) -> None:
+    def __init__(
+        self, prior_alpha: float = 1.0, prior_beta: float = 1.0, seed: int | None = None
+    ) -> None:
         """Initialize the allocator.
 
         Args:

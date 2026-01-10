@@ -1,6 +1,5 @@
 """Tests for multimodal prompts."""
 
-
 from pydantic import BaseModel
 
 from flowprompt.multimodal.content import (
@@ -127,7 +126,7 @@ class TestMultimodalPrompt:
     def test_add_image_file_path(self, tmp_path):
         """Test adding image from file path."""
         img_path = tmp_path / "test.png"
-        img_path.write_bytes(b'\x89PNG' + b'\x00' * 50)
+        img_path.write_bytes(b"\x89PNG" + b"\x00" * 50)
 
         class ImagePrompt(MultimodalPrompt):
             system: str = "Analyze."
@@ -213,10 +212,12 @@ class TestVisionPrompt:
             system: str = "Compare images."
             user: str = "What are the differences?"
 
-        prompt = Comparer().with_images([
-            "https://example.com/img1.jpg",
-            "https://example.com/img2.jpg",
-        ])
+        prompt = Comparer().with_images(
+            [
+                "https://example.com/img1.jpg",
+                "https://example.com/img2.jpg",
+            ]
+        )
 
         assert len(prompt.images) == 2
 

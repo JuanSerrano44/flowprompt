@@ -141,7 +141,11 @@ class MultimodalPrompt(Prompt[OutputT], Generic[OutputT], metaclass=PromptMeta):
 
         # Add video frames
         if self.video:
-            frames = self.video.extract_frames() if not self.video.frames else self.video.frames
+            frames = (
+                self.video.extract_frames()
+                if not self.video.frames
+                else self.video.frames
+            )
             for frame in frames:
                 parts.append(frame.to_message_content())
 
@@ -155,10 +159,12 @@ class MultimodalPrompt(Prompt[OutputT], Generic[OutputT], metaclass=PromptMeta):
                 doc.process()
 
             if doc.text:
-                parts.append({
-                    "type": "text",
-                    "text": f"Document ({doc.format.value if doc.format else 'text'}):\n{doc.text}",
-                })
+                parts.append(
+                    {
+                        "type": "text",
+                        "text": f"Document ({doc.format.value if doc.format else 'text'}):\n{doc.text}",
+                    }
+                )
 
             # Add page images if extracted
             for page_img in doc.pages:
@@ -205,7 +211,9 @@ class MultimodalPrompt(Prompt[OutputT], Generic[OutputT], metaclass=PromptMeta):
             New prompt instance with added document.
         """
         if isinstance(document, str):
-            document = DocumentContent.from_file(document, extract_images=extract_images)
+            document = DocumentContent.from_file(
+                document, extract_images=extract_images
+            )
 
         new_docs = list(self.documents) + [document]
         return self.model_copy(update={"documents": new_docs})

@@ -119,7 +119,9 @@ class TestExperimentSummary:
         """Test human-readable summary generation."""
         config = ExperimentConfig(
             name="prompt_test",
-            variants=[VariantConfig(name="control", prompt_class="P1", is_control=True)],
+            variants=[
+                VariantConfig(name="control", prompt_class="P1", is_control=True)
+            ],
         )
         from flowprompt.testing.experiment import VariantStats
 
@@ -358,7 +360,7 @@ class TestABTestRunner:
             assert result.success
             assert result.variant_name == "control"
             assert result.output.result == "Success"
-            assert result.latency_ms > 0
+            assert result.latency_ms >= 0  # Can be 0 on fast systems with mocked calls
 
     def test_run_prompt_with_success_function(self):
         """Test running prompt with custom success function."""
@@ -591,7 +593,10 @@ class TestABTestRunner:
 
         assert len(summary.recommendations) > 0
         # Should recommend collecting more data or show significance status
-        assert any("data" in rec.lower() or "sample" in rec.lower() for rec in summary.recommendations)
+        assert any(
+            "data" in rec.lower() or "sample" in rec.lower()
+            for rec in summary.recommendations
+        )
 
     def test_check_completion_max_samples(self):
         """Test auto-completion when max samples reached."""

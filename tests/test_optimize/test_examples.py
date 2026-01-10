@@ -90,10 +90,7 @@ class TestExampleDataset:
     def test_add_many(self):
         """Test adding multiple examples."""
         dataset = ExampleDataset()
-        examples = [
-            Example(input={"x": i}, output=i)
-            for i in range(5)
-        ]
+        examples = [Example(input={"x": i}, output=i) for i in range(5)]
         dataset.add_many(examples)
         assert len(dataset) == 5
 

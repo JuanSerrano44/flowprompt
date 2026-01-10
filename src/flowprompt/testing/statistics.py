@@ -51,7 +51,9 @@ class StatisticalResult:
             f"  P-value: {self.p_value:.4f}\n"
             f"  Confidence Level: {self.confidence_level:.0%}\n"
             f"  Effect Size: {self.effect_size:+.2%}\n"
-            f"  Power: {self.power:.2%}" if self.power else ""
+            f"  Power: {self.power:.2%}"
+            if self.power
+            else ""
         )
 
 
@@ -108,15 +110,17 @@ def _normal_ppf(p: float) -> float:
 
     if p < p_low:
         q = math.sqrt(-2 * math.log(p))
-        return (
-            ((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]
-        ) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1)
+        return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / (
+            (((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1
+        )
     elif p <= p_high:
         q = p - 0.5
         r = q * q
         return (
-            ((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]
-        ) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1)
+            (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5])
+            * q
+            / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1)
+        )
     else:
         q = math.sqrt(-2 * math.log(1 - p))
         return -(
@@ -572,13 +576,7 @@ def _recommend_sample_size(
         return 10000  # Default large value
 
     # Sample size formula for two-proportion test
-    n = (
-        2
-        * p_bar
-        * (1 - p_bar)
-        * (z_alpha + z_beta) ** 2
-        / effect**2
-    )
+    n = 2 * p_bar * (1 - p_bar) * (z_alpha + z_beta) ** 2 / effect**2
 
     return int(math.ceil(n))
 
@@ -639,12 +637,17 @@ def bayesian_ab_test(
 
     # 95% credible interval for lift
     relative_lifts.sort()
-    ci_lower = relative_lifts[int(0.025 * len(relative_lifts))] if relative_lifts else 0.0
-    ci_upper = relative_lifts[int(0.975 * len(relative_lifts))] if relative_lifts else 0.0
+    ci_lower = (
+        relative_lifts[int(0.025 * len(relative_lifts))] if relative_lifts else 0.0
+    )
+    ci_upper = (
+        relative_lifts[int(0.975 * len(relative_lifts))] if relative_lifts else 0.0
+    )
 
     return StatisticalResult(
         significant=prob_treatment_better > 0.95 or prob_treatment_better < 0.05,
-        p_value=1 - prob_treatment_better,  # Not a true p-value, but useful for comparison
+        p_value=1
+        - prob_treatment_better,  # Not a true p-value, but useful for comparison
         confidence_level=0.95,
         effect_size=expected_lift,
         test_name="bayesian_ab_test",
@@ -686,6 +689,8 @@ def run_significance_test(
     }
 
     if test_type not in tests:
-        raise ValueError(f"Unknown test type: {test_type}. Available: {list(tests.keys())}")
+        raise ValueError(
+            f"Unknown test type: {test_type}. Available: {list(tests.keys())}"
+        )
 
     return tests[test_type](control_stats, treatment_stats, confidence_level)

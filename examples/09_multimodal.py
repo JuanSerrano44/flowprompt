@@ -24,6 +24,7 @@ from flowprompt.multimodal import (
 # Section 1: Image Content Types
 # =============================================================================
 
+
 def demonstrate_image_content() -> None:
     """Show different ways to create ImageContent."""
     print("ImageContent Creation Methods:")
@@ -63,6 +64,7 @@ def demonstrate_image_content() -> None:
 # =============================================================================
 # Section 2: Vision Prompts for Image Analysis
 # =============================================================================
+
 
 class ImageDescriptionPrompt(VisionPrompt):
     """Describe an image in detail."""
@@ -161,11 +163,16 @@ def demonstrate_multiple_images() -> None:
 # Section 3: Document Processing
 # =============================================================================
 
+
 class DocumentSummaryPrompt(DocumentPrompt):
     """Summarize a document."""
 
-    system = "You are an expert document analyst. Create clear, comprehensive summaries."
-    user = "Please summarize this document, highlighting the main points and conclusions."
+    system = (
+        "You are an expert document analyst. Create clear, comprehensive summaries."
+    )
+    user = (
+        "Please summarize this document, highlighting the main points and conclusions."
+    )
 
     class Output(BaseModel):
         summary: str = Field(description="Document summary")
@@ -262,6 +269,7 @@ def demonstrate_document_prompts() -> None:
 # Section 4: Combining Content Types
 # =============================================================================
 
+
 def demonstrate_mixed_content() -> None:
     """Show how to combine different content types."""
     print("\nMixed Content (Images + Documents):")
@@ -288,6 +296,7 @@ def demonstrate_mixed_content() -> None:
 # Section 5: Video Content (Advanced)
 # =============================================================================
 
+
 def demonstrate_video_content() -> None:
     """Show video frame extraction capabilities."""
     print("\nVideo Content (Frame Extraction):")
@@ -313,6 +322,7 @@ def demonstrate_video_content() -> None:
 # Section 6: Message Format
 # =============================================================================
 
+
 def demonstrate_message_format() -> None:
     """Show how multimodal content is formatted in messages."""
     print("\nMessage Format:")
@@ -332,7 +342,9 @@ def demonstrate_message_format() -> None:
     print("     {")
     print("       'role': 'user',")
     print("       'content': [")
-    print("         {'type': 'image_url', 'image_url': {'url': '...', 'detail': 'auto'}},")
+    print(
+        "         {'type': 'image_url', 'image_url': {'url': '...', 'detail': 'auto'}},"
+    )
     print("         {'type': 'text', 'text': 'Describe what you see...'}")
     print("       ]")
     print("     }")

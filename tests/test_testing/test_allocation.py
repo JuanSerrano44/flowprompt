@@ -202,7 +202,9 @@ class TestEpsilonGreedyAllocator:
 
     def test_epsilon_decay(self, two_variant_experiment):
         """Test epsilon decay."""
-        allocator = EpsilonGreedyAllocator(epsilon=1.0, epsilon_decay=0.5, min_epsilon=0.1)
+        allocator = EpsilonGreedyAllocator(
+            epsilon=1.0, epsilon_decay=0.5, min_epsilon=0.1
+        )
 
         allocator.allocate(two_variant_experiment)
         assert allocator._epsilon == pytest.approx(0.5)

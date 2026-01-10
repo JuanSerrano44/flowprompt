@@ -97,7 +97,12 @@ class ExperimentSummary:
         ]
 
         for name, stats in self.variant_stats.items():
-            control_marker = " (control)" if self.experiment.get_variant(name) and self.experiment.get_variant(name).is_control else ""
+            control_marker = (
+                " (control)"
+                if self.experiment.get_variant(name)
+                and self.experiment.get_variant(name).is_control
+                else ""
+            )
             lines.append(
                 f"  {name}{control_marker}: "
                 f"n={stats.samples}, "
@@ -106,13 +111,15 @@ class ExperimentSummary:
             )
 
         if self.statistical_result:
-            lines.extend([
-                "",
-                "Statistical Analysis:",
-                f"  P-value: {self.statistical_result.p_value:.4f}",
-                f"  Effect Size: {self.statistical_result.effect_size:+.2%}",
-                f"  Significant: {'Yes' if self.statistical_result.significant else 'No'}",
-            ])
+            lines.extend(
+                [
+                    "",
+                    "Statistical Analysis:",
+                    f"  P-value: {self.statistical_result.p_value:.4f}",
+                    f"  Effect Size: {self.statistical_result.effect_size:+.2%}",
+                    f"  Significant: {'Yes' if self.statistical_result.significant else 'No'}",
+                ]
+            )
 
         if self.winner:
             lines.extend(["", f"Winner: {self.winner.name}"])

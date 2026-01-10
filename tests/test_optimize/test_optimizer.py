@@ -114,10 +114,16 @@ class TestEvaluateDataset:
 
     def test_successful_evaluation(self):
         """Test successful dataset evaluation."""
-        dataset = ExampleDataset([
-            Example(input={"text": "hello"}, output=TestPrompt.Output(result="Hello")),
-            Example(input={"text": "world"}, output=TestPrompt.Output(result="World")),
-        ])
+        dataset = ExampleDataset(
+            [
+                Example(
+                    input={"text": "hello"}, output=TestPrompt.Output(result="Hello")
+                ),
+                Example(
+                    input={"text": "world"}, output=TestPrompt.Output(result="World")
+                ),
+            ]
+        )
 
         metric = ExactMatch()
 
@@ -132,10 +138,16 @@ class TestEvaluateDataset:
 
     def test_evaluation_with_errors(self):
         """Test evaluation handles errors gracefully."""
-        dataset = ExampleDataset([
-            Example(input={"text": "hello"}, output=TestPrompt.Output(result="Hello")),
-            Example(input={"text": "world"}, output=TestPrompt.Output(result="World")),
-        ])
+        dataset = ExampleDataset(
+            [
+                Example(
+                    input={"text": "hello"}, output=TestPrompt.Output(result="Hello")
+                ),
+                Example(
+                    input={"text": "world"}, output=TestPrompt.Output(result="World")
+                ),
+            ]
+        )
 
         metric = ExactMatch()
 
@@ -152,16 +164,22 @@ class TestEvaluateDataset:
 
     def test_evaluation_with_custom_temperature(self):
         """Test evaluation uses custom temperature."""
-        dataset = ExampleDataset([
-            Example(input={"text": "test"}, output=TestPrompt.Output(result="Test")),
-        ])
+        dataset = ExampleDataset(
+            [
+                Example(
+                    input={"text": "test"}, output=TestPrompt.Output(result="Test")
+                ),
+            ]
+        )
 
         metric = ExactMatch()
 
         with patch.object(TestPrompt, "run") as mock_run:
             mock_run.return_value = TestPrompt.Output(result="Test")
 
-            _evaluate_dataset(TestPrompt, dataset, metric, model="gpt-4o", temperature=0.8)
+            _evaluate_dataset(
+                TestPrompt, dataset, metric, model="gpt-4o", temperature=0.8
+            )
 
             mock_run.assert_called_once_with(model="gpt-4o", temperature=0.8)
 
@@ -186,10 +204,12 @@ class TestFewShotOptimizer:
         """Test basic optimization flow."""
         optimizer = FewShotOptimizer(num_examples=2)
 
-        dataset = ExampleDataset([
-            Example(input={"text": f"text{i}"}, output=f"output{i}")
-            for i in range(10)
-        ])
+        dataset = ExampleDataset(
+            [
+                Example(input={"text": f"text{i}"}, output=f"output{i}")
+                for i in range(10)
+            ]
+        )
 
         metric = ExactMatch()
         config = OptimizationConfig(max_iterations=2, seed=42)
@@ -209,10 +229,12 @@ class TestFewShotOptimizer:
         """Test early stopping when no improvement."""
         optimizer = FewShotOptimizer(num_examples=2)
 
-        dataset = ExampleDataset([
-            Example(input={"text": f"text{i}"}, output=f"output{i}")
-            for i in range(10)
-        ])
+        dataset = ExampleDataset(
+            [
+                Example(input={"text": f"text{i}"}, output=f"output{i}")
+                for i in range(10)
+            ]
+        )
 
         metric = ExactMatch()
         config = OptimizationConfig(
@@ -243,7 +265,9 @@ class TestFewShotOptimizer:
         assert new_class is not TestPrompt
         # Access field default via Pydantic model_fields
         system_default = new_class.model_fields["system"].default
-        assert "examples" in system_default.lower() or "example" in system_default.lower()
+        assert (
+            "examples" in system_default.lower() or "example" in system_default.lower()
+        )
         assert "hello" in system_default
 
     def test_create_fewshot_prompt_empty_examples(self):
@@ -285,10 +309,12 @@ class TestInstructionOptimizer:
         """Test basic optimization flow."""
         optimizer = InstructionOptimizer(num_candidates=2)
 
-        dataset = ExampleDataset([
-            Example(input={"text": f"text{i}"}, output=f"output{i}")
-            for i in range(10)
-        ])
+        dataset = ExampleDataset(
+            [
+                Example(input={"text": f"text{i}"}, output=f"output{i}")
+                for i in range(10)
+            ]
+        )
 
         metric = ExactMatch()
         config = OptimizationConfig(max_iterations=2, seed=42)
@@ -314,10 +340,12 @@ class TestInstructionOptimizer:
         """Test early stopping in instruction optimizer."""
         optimizer = InstructionOptimizer(num_candidates=2)
 
-        dataset = ExampleDataset([
-            Example(input={"text": f"text{i}"}, output=f"output{i}")
-            for i in range(10)
-        ])
+        dataset = ExampleDataset(
+            [
+                Example(input={"text": f"text{i}"}, output=f"output{i}")
+                for i in range(10)
+            ]
+        )
 
         metric = ExactMatch()
         config = OptimizationConfig(
@@ -407,10 +435,12 @@ class TestOptunaOptimizer:
 
         optimizer = OptunaOptimizer(n_trials=5)
 
-        dataset = ExampleDataset([
-            Example(input={"text": f"text{i}"}, output=f"output{i}")
-            for i in range(10)
-        ])
+        dataset = ExampleDataset(
+            [
+                Example(input={"text": f"text{i}"}, output=f"output{i}")
+                for i in range(10)
+            ]
+        )
 
         metric = ExactMatch()
         config = OptimizationConfig(seed=42)
@@ -459,6 +489,7 @@ class TestBootstrapOptimizer:
 
     def test_initialization(self):
         """Test optimizer initialization."""
+
         def validator(_inp, _out):
             return True
 
@@ -484,10 +515,12 @@ class TestBootstrapOptimizer:
         """Test basic bootstrap optimization."""
         optimizer = BootstrapOptimizer(bootstrap_rounds=2)
 
-        dataset = ExampleDataset([
-            Example(input={"text": f"text{i}"}, output=f"output{i}")
-            for i in range(20)
-        ])
+        dataset = ExampleDataset(
+            [
+                Example(input={"text": f"text{i}"}, output=f"output{i}")
+                for i in range(20)
+            ]
+        )
 
         metric = ExactMatch()
         config = OptimizationConfig(seed=42)
@@ -516,6 +549,7 @@ class TestBootstrapOptimizer:
     @patch("flowprompt.optimize.optimizer.FewShotOptimizer.optimize")
     def test_optimize_with_validator(self, mock_fewshot_optimize, mock_evaluate):
         """Test bootstrap optimization with validator function."""
+
         def validator(_inp, out):
             return len(str(out)) > 0
 
@@ -524,10 +558,12 @@ class TestBootstrapOptimizer:
             validator_fn=validator,
         )
 
-        dataset = ExampleDataset([
-            Example(input={"text": f"text{i}"}, output=f"output{i}")
-            for i in range(10)
-        ])
+        dataset = ExampleDataset(
+            [
+                Example(input={"text": f"text{i}"}, output=f"output{i}")
+                for i in range(10)
+            ]
+        )
 
         metric = ExactMatch()
 
@@ -553,9 +589,11 @@ class TestOptimizeFunction:
     @patch.object(FewShotOptimizer, "optimize")
     def test_optimize_fewshot_strategy(self, mock_optimize):
         """Test optimize function with fewshot strategy."""
-        dataset = ExampleDataset([
-            Example(input={"text": "test"}, output="result"),
-        ])
+        dataset = ExampleDataset(
+            [
+                Example(input={"text": "test"}, output="result"),
+            ]
+        )
         metric = ExactMatch()
 
         mock_result = OptimizationResult(
@@ -579,9 +617,11 @@ class TestOptimizeFunction:
     @patch.object(InstructionOptimizer, "optimize")
     def test_optimize_instruction_strategy(self, mock_optimize):
         """Test optimize function with instruction strategy."""
-        dataset = ExampleDataset([
-            Example(input={"text": "test"}, output="result"),
-        ])
+        dataset = ExampleDataset(
+            [
+                Example(input={"text": "test"}, output="result"),
+            ]
+        )
         metric = ExactMatch()
 
         mock_result = OptimizationResult(
@@ -604,9 +644,11 @@ class TestOptimizeFunction:
     @patch.object(OptunaOptimizer, "optimize")
     def test_optimize_optuna_strategy(self, mock_optimize):
         """Test optimize function with optuna strategy."""
-        dataset = ExampleDataset([
-            Example(input={"text": "test"}, output="result"),
-        ])
+        dataset = ExampleDataset(
+            [
+                Example(input={"text": "test"}, output="result"),
+            ]
+        )
         metric = ExactMatch()
 
         mock_result = OptimizationResult(
@@ -630,9 +672,11 @@ class TestOptimizeFunction:
     @patch.object(BootstrapOptimizer, "optimize")
     def test_optimize_bootstrap_strategy(self, mock_optimize):
         """Test optimize function with bootstrap strategy."""
-        dataset = ExampleDataset([
-            Example(input={"text": "test"}, output="result"),
-        ])
+        dataset = ExampleDataset(
+            [
+                Example(input={"text": "test"}, output="result"),
+            ]
+        )
         metric = ExactMatch()
 
         mock_result = OptimizationResult(
@@ -655,9 +699,11 @@ class TestOptimizeFunction:
 
     def test_optimize_unknown_strategy(self):
         """Test optimize function with unknown strategy raises error."""
-        dataset = ExampleDataset([
-            Example(input={"text": "test"}, output="result"),
-        ])
+        dataset = ExampleDataset(
+            [
+                Example(input={"text": "test"}, output="result"),
+            ]
+        )
         metric = ExactMatch()
 
         with pytest.raises(ValueError, match="Unknown strategy"):
@@ -671,9 +717,11 @@ class TestOptimizeFunction:
     @patch.object(FewShotOptimizer, "optimize")
     def test_optimize_with_custom_config(self, mock_optimize):
         """Test optimize function with custom config."""
-        dataset = ExampleDataset([
-            Example(input={"text": "test"}, output="result"),
-        ])
+        dataset = ExampleDataset(
+            [
+                Example(input={"text": "test"}, output="result"),
+            ]
+        )
         metric = ExactMatch()
         config = OptimizationConfig(max_iterations=20, seed=123)
 

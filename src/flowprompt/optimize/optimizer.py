@@ -257,7 +257,9 @@ class FewShotOptimizer(BaseOptimizer):
             history=history,
             iterations=len(history),
             improvements=sum(
-                1 for i, h in enumerate(history) if i > 0 and h["score"] > history[i - 1]["score"]
+                1
+                for i, h in enumerate(history)
+                if i > 0 and h["score"] > history[i - 1]["score"]
             ),
         )
 
@@ -348,7 +350,9 @@ class InstructionOptimizer(BaseOptimizer):
         best_score = self._evaluate_prompt(prompt_class, eval_data, metric, model)
         best_system = current_system
         best_user = current_user
-        history: list[dict[str, Any]] = [{"iteration": 0, "score": best_score, "type": "baseline"}]
+        history: list[dict[str, Any]] = [
+            {"iteration": 0, "score": best_score, "type": "baseline"}
+        ]
         no_improvement_count = 0
 
         for iteration in range(1, config.max_iterations + 1):
@@ -388,7 +392,10 @@ class InstructionOptimizer(BaseOptimizer):
                     no_improvement_count += 1
 
             # Early stopping
-            if no_improvement_count >= config.early_stopping_patience * self.num_candidates:
+            if (
+                no_improvement_count
+                >= config.early_stopping_patience * self.num_candidates
+            ):
                 break
 
         # Create final optimized class
@@ -406,7 +413,9 @@ class InstructionOptimizer(BaseOptimizer):
             history=history,
             iterations=len({h["iteration"] for h in history}),
             improvements=sum(
-                1 for i, h in enumerate(history) if i > 0 and h["score"] > best_score * 0.99
+                1
+                for i, h in enumerate(history)
+                if i > 0 and h["score"] > best_score * 0.99
             ),
         )
 
@@ -448,9 +457,7 @@ Example inputs:
 Generate {num_candidates} improved versions as a JSON array:
 [{{"system": "...", "user": "..."}}]"""
 
-        examples_str = "\n".join(
-            f"- {ex.input}" for ex in examples[:3]
-        )
+        examples_str = "\n".join(f"- {ex.input}" for ex in examples[:3])
 
         try:
             generator = InstructionGenerator(
@@ -467,10 +474,11 @@ Generate {num_candidates} improved versions as a JSON array:
 
             # Extract JSON from response
             import re
-            json_match = re.search(r'\[.*\]', response_str, re.DOTALL)
+
+            json_match = re.search(r"\[.*\]", response_str, re.DOTALL)
             if json_match:
                 candidates = json.loads(json_match.group())
-                return candidates[:self.num_candidates]
+                return candidates[: self.num_candidates]
         except Exception:
             pass
 
@@ -580,7 +588,9 @@ class OptunaOptimizer(BaseOptimizer):
             # Create prompt with examples
             if examples:
                 fewshot_optimizer = FewShotOptimizer(num_examples=num_examples)
-                test_class = fewshot_optimizer._create_fewshot_prompt(prompt_class, examples)
+                test_class = fewshot_optimizer._create_fewshot_prompt(
+                    prompt_class, examples
+                )
             else:
                 test_class = prompt_class
 
@@ -588,12 +598,14 @@ class OptunaOptimizer(BaseOptimizer):
             score = _evaluate_dataset(test_class, eval_data, metric, model, temperature)
 
             # Track history
-            history.append({
-                "trial": trial.number,
-                "score": score,
-                "temperature": temperature,
-                "num_examples": num_examples,
-            })
+            history.append(
+                {
+                    "trial": trial.number,
+                    "score": score,
+                    "temperature": temperature,
+                    "num_examples": num_examples,
+                }
+            )
 
             # Update best
             if score > best_score:
@@ -622,7 +634,9 @@ class OptunaOptimizer(BaseOptimizer):
         examples = best_config.get("examples", [])
         if examples:
             fewshot_optimizer = FewShotOptimizer()
-            optimized_class = fewshot_optimizer._create_fewshot_prompt(prompt_class, examples)
+            optimized_class = fewshot_optimizer._create_fewshot_prompt(
+                prompt_class, examples
+            )
         else:
             optimized_class = prompt_class
 
@@ -636,7 +650,9 @@ class OptunaOptimizer(BaseOptimizer):
             history=history,
             iterations=len(history),
             improvements=sum(
-                1 for i, h in enumerate(history) if i > 0 and h["score"] > history[i - 1]["score"]
+                1
+                for i, h in enumerate(history)
+                if i > 0 and h["score"] > history[i - 1]["score"]
             ),
         )
 
@@ -718,7 +734,9 @@ class BootstrapOptimizer(BaseOptimizer):
                     output = prompt.run(model=model)
 
                     # Estimate confidence (simple heuristic)
-                    confidence = 0.9  # Could be improved with actual confidence estimation
+                    confidence = (
+                        0.9  # Could be improved with actual confidence estimation
+                    )
 
                     bootstrapper.record(
                         ex.input,
@@ -732,11 +750,13 @@ class BootstrapOptimizer(BaseOptimizer):
             # Evaluate current performance using shared helper
             current_score = _evaluate_dataset(current_class, labeled, metric, model)
 
-            history.append({
-                "round": round_num,
-                "score": current_score,
-                "bootstrapped_examples": len(bootstrapper._examples),
-            })
+            history.append(
+                {
+                    "round": round_num,
+                    "score": current_score,
+                    "bootstrapped_examples": len(bootstrapper._examples),
+                }
+            )
 
             if current_score > best_score:
                 best_score = current_score
@@ -752,7 +772,9 @@ class BootstrapOptimizer(BaseOptimizer):
             history=history,
             iterations=len(history),
             improvements=sum(
-                1 for i, h in enumerate(history) if i > 0 and h["score"] > history[i - 1]["score"]
+                1
+                for i, h in enumerate(history)
+                if i > 0 and h["score"] > history[i - 1]["score"]
             ),
         )
 
@@ -803,8 +825,7 @@ def optimize(
 
     if strategy not in optimizers:
         raise ValueError(
-            f"Unknown strategy: {strategy}. "
-            f"Available: {list(optimizers.keys())}"
+            f"Unknown strategy: {strategy}. Available: {list(optimizers.keys())}"
         )
 
     optimizer = optimizers[strategy](**kwargs)

@@ -26,6 +26,7 @@ from flowprompt.testing.experiment import VariantStats
 # Section 1: Define prompt variants to compare
 # =============================================================================
 
+
 class SummarizePromptV1(Prompt):
     """Original summarization prompt (control)."""
 
@@ -50,6 +51,7 @@ class SummarizePromptV3(Prompt):
 # =============================================================================
 # Section 2: Create and configure an experiment
 # =============================================================================
+
 
 def create_experiment_manually() -> tuple[ExperimentConfig, ABTestRunner]:
     """Create an experiment with manual configuration.
@@ -149,6 +151,7 @@ def create_experiment_simple() -> tuple[ExperimentConfig, ABTestRunner]:
 # Section 3: Demonstrate allocation strategies
 # =============================================================================
 
+
 def demonstrate_allocation_strategies() -> None:
     """Show the different traffic allocation strategies available."""
     print("\nAllocation Strategies:")
@@ -159,8 +162,14 @@ def demonstrate_allocation_strategies() -> None:
         (AllocationStrategy.ROUND_ROBIN, "Cycles through variants in order"),
         (AllocationStrategy.WEIGHTED, "Proportional to configured weights"),
         (AllocationStrategy.EPSILON_GREEDY, "Explore with probability epsilon"),
-        (AllocationStrategy.UCB, "Upper Confidence Bound - balances exploration/exploitation"),
-        (AllocationStrategy.THOMPSON_SAMPLING, "Bayesian sampling from Beta distributions"),
+        (
+            AllocationStrategy.UCB,
+            "Upper Confidence Bound - balances exploration/exploitation",
+        ),
+        (
+            AllocationStrategy.THOMPSON_SAMPLING,
+            "Bayesian sampling from Beta distributions",
+        ),
     ]
 
     for strategy, description in strategies:
@@ -174,6 +183,7 @@ def demonstrate_allocation_strategies() -> None:
 # =============================================================================
 # Section 4: Simulate running an experiment
 # =============================================================================
+
 
 def simulate_experiment_run(
     config: ExperimentConfig,
@@ -243,6 +253,7 @@ def simulate_experiment_run(
 # =============================================================================
 # Section 5: Analyze results and statistical significance
 # =============================================================================
+
 
 def demonstrate_statistical_analysis() -> None:
     """Show statistical analysis capabilities."""
@@ -337,6 +348,7 @@ def analyze_experiment_results(
 # =============================================================================
 # Section 6: Production workflow example
 # =============================================================================
+
 
 def demonstrate_production_workflow() -> None:
     """Show how to use A/B testing in production."""

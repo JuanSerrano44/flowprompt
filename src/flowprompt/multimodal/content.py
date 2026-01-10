@@ -117,9 +117,7 @@ class ImageContent(MultimodalContent):
     def __post_init__(self) -> None:
         """Validate that at least one source is provided."""
         if not any([self.data, self.url, self.file_path]):
-            raise ValueError(
-                "Must provide at least one of: data, url, or file_path"
-            )
+            raise ValueError("Must provide at least one of: data, url, or file_path")
 
         # Auto-detect format if not specified
         if self.format is None and self.file_path:
@@ -289,9 +287,7 @@ class AudioContent(MultimodalContent):
     def __post_init__(self) -> None:
         """Validate audio content."""
         if not any([self.data, self.url, self.file_path]):
-            raise ValueError(
-                "Must provide at least one of: data, url, or file_path"
-            )
+            raise ValueError("Must provide at least one of: data, url, or file_path")
 
         # Auto-detect format
         if self.format is None and self.file_path:
@@ -410,9 +406,7 @@ class VideoContent(MultimodalContent):
     def __post_init__(self) -> None:
         """Validate video content."""
         if not any([self.file_path, self.url, self.frames]):
-            raise ValueError(
-                "Must provide at least one of: file_path, url, or frames"
-            )
+            raise ValueError("Must provide at least one of: file_path, url, or frames")
 
     def extract_frames(self) -> list[ImageContent]:
         """Extract frames from video.
@@ -732,7 +726,9 @@ class DocumentContent(MultimodalContent):
         )
 
     @classmethod
-    def from_text(cls, text: str, format: DocumentFormat = DocumentFormat.TXT) -> DocumentContent:
+    def from_text(
+        cls, text: str, format: DocumentFormat = DocumentFormat.TXT
+    ) -> DocumentContent:
         """Create DocumentContent from text.
 
         Args:

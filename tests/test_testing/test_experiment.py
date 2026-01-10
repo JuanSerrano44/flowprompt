@@ -1,6 +1,5 @@
 """Tests for experiment configuration and management."""
 
-
 import pytest
 
 from flowprompt.testing.experiment import (
@@ -248,9 +247,15 @@ class TestVariantStats:
         stats = VariantStats(name="control")
 
         results = [
-            ExperimentResult(experiment_id="e", variant_name="c", success=True, metric_value=0.8),
-            ExperimentResult(experiment_id="e", variant_name="c", success=False, metric_value=0.2),
-            ExperimentResult(experiment_id="e", variant_name="c", success=True, metric_value=0.9),
+            ExperimentResult(
+                experiment_id="e", variant_name="c", success=True, metric_value=0.8
+            ),
+            ExperimentResult(
+                experiment_id="e", variant_name="c", success=False, metric_value=0.2
+            ),
+            ExperimentResult(
+                experiment_id="e", variant_name="c", success=True, metric_value=0.9
+            ),
         ]
 
         for r in results:
@@ -352,12 +357,14 @@ class TestExperimentStore:
 
         # Record some results
         for _ in range(5):
-            store.record_result(ExperimentResult(
-                experiment_id=config.id,
-                variant_name="control",
-                success=True,
-                metric_value=0.8,
-            ))
+            store.record_result(
+                ExperimentResult(
+                    experiment_id=config.id,
+                    variant_name="control",
+                    success=True,
+                    metric_value=0.8,
+                )
+            )
 
         stats = store.get_stats(config.id)
         assert "control" in stats

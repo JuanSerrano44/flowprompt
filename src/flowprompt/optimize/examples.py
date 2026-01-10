@@ -461,8 +461,6 @@ def format_examples_for_prompt(
             output_str = str(ex.output)
 
         # Apply template
-        formatted.append(
-            format_template.format(input=input_str, output=output_str)
-        )
+        formatted.append(format_template.format(input=input_str, output=output_str))
 
     return separator.join(formatted)

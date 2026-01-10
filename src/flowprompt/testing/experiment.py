@@ -177,7 +177,9 @@ class ExperimentResult:
             "variant_name": self.variant_name,
             "user_id": self.user_id,
             "input_data": self.input_data,
-            "output": self.output if not isinstance(self.output, BaseModel) else self.output.model_dump(),
+            "output": self.output
+            if not isinstance(self.output, BaseModel)
+            else self.output.model_dump(),
             "success": self.success,
             "metric_value": self.metric_value,
             "latency_ms": self.latency_ms,
@@ -286,7 +288,9 @@ class ExperimentStore:
         self._experiments[config.id] = config
         if config.id not in self._results:
             self._results[config.id] = []
-            self._stats[config.id] = {v.name: VariantStats(name=v.name) for v in config.variants}
+            self._stats[config.id] = {
+                v.name: VariantStats(name=v.name) for v in config.variants
+            }
         self._persist()
 
     def get_experiment(self, experiment_id: str) -> ExperimentConfig | None:
@@ -314,7 +318,9 @@ class ExperimentStore:
 
         # Update stats
         if result.variant_name not in self._stats[exp_id]:
-            self._stats[exp_id][result.variant_name] = VariantStats(name=result.variant_name)
+            self._stats[exp_id][result.variant_name] = VariantStats(
+                name=result.variant_name
+            )
         self._stats[exp_id][result.variant_name].update(result)
 
         self._persist()
@@ -347,8 +353,7 @@ class ExperimentStore:
 
         # Save experiments
         experiments_data = {
-            eid: exp.model_dump(mode="json")
-            for eid, exp in self._experiments.items()
+            eid: exp.model_dump(mode="json") for eid, exp in self._experiments.items()
         }
         (path / "experiments.json").write_text(json.dumps(experiments_data, indent=2))
 

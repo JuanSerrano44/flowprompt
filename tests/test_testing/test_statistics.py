@@ -13,7 +13,9 @@ from flowprompt.testing.statistics import (
 )
 
 
-def create_stats(samples: int, successes: int, mean_metric: float = None, std_metric: float = 0.0) -> VariantStats:
+def create_stats(
+    samples: int, successes: int, mean_metric: float = None, std_metric: float = 0.0
+) -> VariantStats:
     """Helper to create VariantStats with given values."""
     stats = VariantStats(name="test")
     stats.samples = samples
@@ -153,8 +155,12 @@ class TestTTestMeans:
 
     def test_no_difference(self):
         """Test when means are equal."""
-        control = create_stats(samples=100, successes=50, mean_metric=0.5, std_metric=0.1)
-        treatment = create_stats(samples=100, successes=50, mean_metric=0.5, std_metric=0.1)
+        control = create_stats(
+            samples=100, successes=50, mean_metric=0.5, std_metric=0.1
+        )
+        treatment = create_stats(
+            samples=100, successes=50, mean_metric=0.5, std_metric=0.1
+        )
 
         result = t_test_means(control, treatment)
 
@@ -163,8 +169,12 @@ class TestTTestMeans:
 
     def test_significant_difference(self):
         """Test when means differ significantly."""
-        control = create_stats(samples=100, successes=50, mean_metric=0.5, std_metric=0.1)
-        treatment = create_stats(samples=100, successes=70, mean_metric=0.7, std_metric=0.1)
+        control = create_stats(
+            samples=100, successes=50, mean_metric=0.5, std_metric=0.1
+        )
+        treatment = create_stats(
+            samples=100, successes=70, mean_metric=0.7, std_metric=0.1
+        )
 
         result = t_test_means(control, treatment)
 
@@ -175,7 +185,9 @@ class TestTTestMeans:
     def test_insufficient_samples(self):
         """Test with insufficient samples."""
         control = create_stats(samples=1, successes=1, mean_metric=0.5, std_metric=0.1)
-        treatment = create_stats(samples=1, successes=1, mean_metric=0.6, std_metric=0.1)
+        treatment = create_stats(
+            samples=1, successes=1, mean_metric=0.6, std_metric=0.1
+        )
 
         result = t_test_means(control, treatment)
 
@@ -184,8 +196,12 @@ class TestTTestMeans:
 
     def test_cohens_d_in_details(self):
         """Test that Cohen's d is calculated."""
-        control = create_stats(samples=50, successes=25, mean_metric=0.5, std_metric=0.15)
-        treatment = create_stats(samples=50, successes=35, mean_metric=0.7, std_metric=0.15)
+        control = create_stats(
+            samples=50, successes=25, mean_metric=0.5, std_metric=0.15
+        )
+        treatment = create_stats(
+            samples=50, successes=35, mean_metric=0.7, std_metric=0.15
+        )
 
         result = t_test_means(control, treatment)
 
@@ -261,8 +277,12 @@ class TestRunSignificanceTest:
 
     def test_t_test(self):
         """Test t-test selection."""
-        control = create_stats(samples=100, successes=50, mean_metric=0.5, std_metric=0.1)
-        treatment = create_stats(samples=100, successes=60, mean_metric=0.6, std_metric=0.1)
+        control = create_stats(
+            samples=100, successes=50, mean_metric=0.5, std_metric=0.1
+        )
+        treatment = create_stats(
+            samples=100, successes=60, mean_metric=0.6, std_metric=0.1
+        )
 
         result = run_significance_test(control, treatment, test_type="t_test")
         assert result.test_name == "welch_t_test"
@@ -289,7 +309,8 @@ class TestRunSignificanceTest:
         treatment = create_stats(samples=100, successes=55)
 
         result = run_significance_test(
-            control, treatment,
+            control,
+            treatment,
             test_type="z_test",
             confidence_level=0.99,
         )

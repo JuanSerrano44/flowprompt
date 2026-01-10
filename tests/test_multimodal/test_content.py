@@ -23,10 +23,10 @@ class TestImageContent:
         """Test creating from base64 data."""
         # Small PNG image (1x1 white pixel)
         png_data = base64.b64encode(
-            b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01'
-            b'\x00\x00\x00\x01\x08\x02\x00\x00\x00\x90wS\xde\x00'
-            b'\x00\x00\x0cIDATx\x9cc\xf8\x0f\x00\x00\x01\x01\x00'
-            b'\x05\x18\xd8N\x00\x00\x00\x00IEND\xaeB`\x82'
+            b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01"
+            b"\x00\x00\x00\x01\x08\x02\x00\x00\x00\x90wS\xde\x00"
+            b"\x00\x00\x0cIDATx\x9cc\xf8\x0f\x00\x00\x01\x01\x00"
+            b"\x05\x18\xd8N\x00\x00\x00\x00IEND\xaeB`\x82"
         ).decode()
 
         image = ImageContent(data=png_data, format=ImageFormat.PNG)
@@ -62,7 +62,7 @@ class TestImageContent:
         """Test creating from file."""
         # Create a dummy image file
         img_path = tmp_path / "test.png"
-        img_data = b'\x89PNG\r\n\x1a\n' + b'\x00' * 100
+        img_data = b"\x89PNG\r\n\x1a\n" + b"\x00" * 100
         img_path.write_bytes(img_data)
 
         image = ImageContent.from_file(str(img_path))
@@ -73,7 +73,7 @@ class TestImageContent:
 
     def test_from_bytes(self):
         """Test creating from raw bytes."""
-        data = b'\x89PNG' + b'\x00' * 50
+        data = b"\x89PNG" + b"\x00" * 50
 
         image = ImageContent.from_bytes(data, format=ImageFormat.PNG)
 
@@ -92,7 +92,7 @@ class TestImageContent:
 
     def test_to_message_content_base64(self):
         """Test message content format for base64."""
-        png_data = base64.b64encode(b'\x89PNG' + b'\x00' * 50).decode()
+        png_data = base64.b64encode(b"\x89PNG" + b"\x00" * 50).decode()
         image = ImageContent(data=png_data, format=ImageFormat.PNG)
 
         content = image.to_message_content()
@@ -127,7 +127,7 @@ class TestAudioContent:
     def test_from_file(self, tmp_path):
         """Test creating from file."""
         audio_path = tmp_path / "test.wav"
-        audio_path.write_bytes(b'\x00' * 100)
+        audio_path.write_bytes(b"\x00" * 100)
 
         audio = AudioContent.from_file(str(audio_path))
 
