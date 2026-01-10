@@ -291,17 +291,15 @@ class FewShotOptimizer(BaseOptimizer):
         # Create new system with examples
         new_system = f"{original_system}\n\nHere are some examples:\n\n{examples_str}"
 
-        # Create new class
+        # Create new class with proper annotations for Pydantic
+        # Note: Output class is inherited from base_class, don't set it explicitly
         class_attrs = {
+            "__module__": base_class.__module__,
             "__version__": getattr(base_class, "__version__", "0.0.0"),
+            "__annotations__": {"system": str, "user": str},
             "system": new_system,
             "user": getattr(base_class, "user", ""),
         }
-
-        # Copy Output class if exists
-        if hasattr(base_class, "_output_model") and base_class._output_model:
-            class_attrs["Output"] = base_class._output_model
-            class_attrs["_output_model"] = base_class._output_model
 
         return type(f"Optimized{base_class.__name__}", (base_class,), class_attrs)
 
@@ -426,7 +424,7 @@ class InstructionOptimizer(BaseOptimizer):
 
         # Create optimizer prompt
         class InstructionGenerator(Prompt):
-            system = """You are an expert prompt engineer. Your task is to improve LLM prompt instructions.
+            system: str = """You are an expert prompt engineer. Your task is to improve LLM prompt instructions.
 
 Given the current prompt and its performance, generate improved versions that are:
 1. More specific and clear
@@ -436,7 +434,7 @@ Given the current prompt and its performance, generate improved versions that ar
 
 Respond with a JSON array of improved prompts."""
 
-            user = """Current System Prompt:
+            user: str = """Current System Prompt:
 {current_system}
 
 Current User Template:
@@ -499,15 +497,14 @@ Generate {num_candidates} improved versions as a JSON array:
         user: str,
     ) -> type[Prompt[OutputT]]:
         """Create a new prompt class with updated instructions."""
+        # Note: Output class is inherited from base_class, don't set it explicitly
         class_attrs = {
+            "__module__": base_class.__module__,
             "__version__": getattr(base_class, "__version__", "0.0.0"),
+            "__annotations__": {"system": str, "user": str},
             "system": system,
             "user": user,
         }
-
-        if hasattr(base_class, "_output_model") and base_class._output_model:
-            class_attrs["Output"] = base_class._output_model
-            class_attrs["_output_model"] = base_class._output_model
 
         return type(f"Optimized{base_class.__name__}", (base_class,), class_attrs)
 

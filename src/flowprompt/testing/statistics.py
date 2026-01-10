@@ -26,6 +26,7 @@ class StatisticalResult:
         p_value: P-value of the test.
         confidence_level: Confidence level used.
         effect_size: Estimated effect size (relative improvement).
+        confidence_interval: Confidence interval for the effect size.
         power: Statistical power of the test.
         sample_size_recommendation: Recommended sample size if not significant.
         test_name: Name of the statistical test used.
@@ -34,8 +35,9 @@ class StatisticalResult:
 
     significant: bool
     p_value: float
-    confidence_level: float
-    effect_size: float
+    confidence_level: float = 0.95
+    effect_size: float = 0.0
+    confidence_interval: tuple[float, float] | None = None
     power: float | None = None
     sample_size_recommendation: int | None = None
     test_name: str = ""

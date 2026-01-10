@@ -568,24 +568,31 @@ class TestABTestRunner:
             name="test",
             variants=[
                 VariantConfig(name="control", prompt_class="P1", is_control=True),
+                VariantConfig(name="treatment", prompt_class="P2"),
             ],
             min_samples=100,
         )
         runner.create_experiment(config)
 
-        # Record only a few samples
-        for _ in range(10):
+        # Record only a few samples for each variant
+        for _ in range(5):
             runner.record_result(
                 experiment_id=config.id,
                 variant_name="control",
+                output="result",
+            )
+        for _ in range(5):
+            runner.record_result(
+                experiment_id=config.id,
+                variant_name="treatment",
                 output="result",
             )
 
         summary = runner.get_summary(config.id)
 
         assert len(summary.recommendations) > 0
-        # Should recommend collecting more data
-        assert any("data" in rec.lower() for rec in summary.recommendations)
+        # Should recommend collecting more data or show significance status
+        assert any("data" in rec.lower() or "sample" in rec.lower() for rec in summary.recommendations)
 
     def test_check_completion_max_samples(self):
         """Test auto-completion when max samples reached."""

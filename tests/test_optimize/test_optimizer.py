@@ -242,8 +242,10 @@ class TestFewShotOptimizer:
         new_class = optimizer._create_fewshot_prompt(TestPrompt, examples)
 
         assert new_class is not TestPrompt
-        assert "examples" in new_class.system.lower() or "example" in new_class.system.lower()
-        assert "hello" in new_class.system
+        # Access field default via Pydantic model_fields
+        system_default = new_class.model_fields["system"].default
+        assert "examples" in system_default.lower() or "example" in system_default.lower()
+        assert "hello" in system_default
 
     def test_create_fewshot_prompt_empty_examples(self):
         """Test creating prompt with empty examples returns original."""
@@ -344,7 +346,8 @@ class TestInstructionOptimizer:
 
         examples = [Example(input={"text": "test"}, output="result")]
 
-        with patch("flowprompt.optimize.optimizer.Prompt.run") as mock_run:
+        # Mock the run method at the core prompt level
+        with patch("flowprompt.core.prompt.Prompt.run") as mock_run:
             # Simulate LLM failure
             mock_run.side_effect = Exception("API Error")
 
@@ -371,8 +374,9 @@ class TestInstructionOptimizer:
         )
 
         assert new_class is not TestPrompt
-        assert new_class.system == "New system prompt"
-        assert new_class.user == "New user template"
+        # Access field defaults via Pydantic model_fields
+        assert new_class.model_fields["system"].default == "New system prompt"
+        assert new_class.model_fields["user"].default == "New user template"
 
 
 class TestOptunaOptimizer:
@@ -423,14 +427,32 @@ class TestOptunaOptimizer:
 
     def test_optimize_without_optuna_raises_error(self):
         """Test that optimizer raises error when Optuna not installed."""
+        import sys
+        import builtins
+
         optimizer = OptunaOptimizer()
         dataset = ExampleDataset([Example(input={"text": "test"}, output="result")])
         metric = ExactMatch()
 
-        with patch("flowprompt.optimize.optimizer.optuna", None):
-            with patch.dict("sys.modules", {"optuna": None}):
-                with pytest.raises(ImportError, match="Optuna is required"):
-                    optimizer.optimize(TestPrompt, dataset, metric)
+        # Remove optuna from sys.modules and make import fail
+        original_import = builtins.__import__
+        original_optuna = sys.modules.get("optuna")
+
+        def mock_import(name, *args, **kwargs):
+            if name == "optuna":
+                raise ImportError("No module named 'optuna'")
+            return original_import(name, *args, **kwargs)
+
+        try:
+            if "optuna" in sys.modules:
+                del sys.modules["optuna"]
+            builtins.__import__ = mock_import
+            with pytest.raises(ImportError, match="Optuna is required"):
+                optimizer.optimize(TestPrompt, dataset, metric)
+        finally:
+            builtins.__import__ = original_import
+            if original_optuna is not None:
+                sys.modules["optuna"] = original_optuna
 
 
 class TestBootstrapOptimizer:
