@@ -246,6 +246,184 @@ def create_app() -> Any:
         count = cache.clear()
         typer.echo(f"Cleared {count} cache entries")
 
+    @app.command()
+    def optimize(
+        prompt_file: str = Argument(..., help="Python file containing Prompt class"),
+        examples_file: str = Argument(..., help="JSON file with training examples"),
+        model: str = Option("gpt-4o-mini", help="Model to use for optimization"),
+        strategy: str = Option(
+            "fewshot",
+            help="Optimization strategy (fewshot, instruction, bootstrap)",
+        ),
+        output: str = Option(None, "--output", "-o", help="Output file for optimized prompt"),
+        iterations: int = Option(10, help="Number of optimization iterations"),
+    ) -> None:
+        """Optimize a prompt using training examples.
+
+        Example:
+            flowprompt optimize my_prompt.py examples.json --strategy fewshot
+
+        The examples.json should have this format:
+            [
+                {"input": {"text": "John is 25"}, "output": {"name": "John", "age": 25}},
+                {"input": {"text": "Alice is 30"}, "output": {"name": "Alice", "age": 30}}
+            ]
+        """
+        import importlib.util
+        import inspect
+
+        from flowprompt.core.prompt import Prompt
+        from flowprompt.optimize import (
+            ExactMatch,
+            Example,
+            ExampleDataset,
+            OptimizationConfig,
+        )
+        from flowprompt.optimize import optimize as run_optimize
+
+        prompt_path = Path(prompt_file)
+        examples_path = Path(examples_file)
+
+        if not prompt_path.exists():
+            typer.echo(f"Error: Prompt file '{prompt_file}' not found", err=True)
+            raise typer.Exit(1)
+
+        if not examples_path.exists():
+            typer.echo(f"Error: Examples file '{examples_file}' not found", err=True)
+            raise typer.Exit(1)
+
+        # Load the prompt class from Python file
+        typer.echo(f"Loading prompt from {prompt_path.name}...")
+        try:
+            spec = importlib.util.spec_from_file_location("prompt_module", prompt_path)
+            if spec is None or spec.loader is None:
+                raise ImportError(f"Could not load {prompt_path}")
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+
+            # Find Prompt subclass in the module
+            prompt_class = None
+            for name, obj in inspect.getmembers(module, inspect.isclass):
+                if issubclass(obj, Prompt) and obj is not Prompt:
+                    prompt_class = obj
+                    break
+
+            if prompt_class is None:
+                typer.echo("Error: No Prompt subclass found in file", err=True)
+                raise typer.Exit(1)
+
+            typer.echo(f"  Found: {prompt_class.__name__}")
+
+        except Exception as e:
+            typer.echo(f"Error loading prompt: {e}", err=True)
+            raise typer.Exit(1) from None
+
+        # Load examples from JSON
+        typer.echo(f"Loading examples from {examples_path.name}...")
+        try:
+            examples_data = json.loads(examples_path.read_text())
+            examples = [
+                Example(input=ex["input"], output=ex["output"]) for ex in examples_data
+            ]
+            dataset = ExampleDataset(examples)
+            typer.echo(f"  Loaded {len(examples)} examples")
+        except Exception as e:
+            typer.echo(f"Error loading examples: {e}", err=True)
+            raise typer.Exit(1) from None
+
+        # Run baseline evaluation
+        typer.echo("\nEvaluating baseline...")
+        try:
+            from flowprompt.optimize.optimizer import _evaluate_dataset
+
+            baseline_score = _evaluate_dataset(
+                prompt_class, dataset, ExactMatch(), model
+            )
+            typer.echo(f"  Baseline accuracy: {baseline_score:.1%}")
+        except Exception as e:
+            typer.echo(f"  Could not evaluate baseline: {e}")
+            baseline_score = None
+
+        # Run optimization
+        typer.echo(f"\nOptimizing with strategy='{strategy}'...")
+        typer.echo(f"  Model: {model}")
+        typer.echo(f"  Iterations: {iterations}")
+        typer.echo("")
+
+        try:
+            config = OptimizationConfig(
+                max_iterations=iterations,
+                num_candidates=3,
+            )
+
+            result = run_optimize(
+                prompt_class,
+                dataset=dataset,
+                metric=ExactMatch(),
+                model=model,
+                strategy=strategy,
+                config=config,
+            )
+
+            # Show results
+            typer.echo("-" * 50)
+            typer.echo("OPTIMIZATION COMPLETE")
+            typer.echo("-" * 50)
+            if baseline_score is not None:
+                improvement = result.best_score - baseline_score
+                typer.echo(f"  Before: {baseline_score:.1%} accuracy")
+                typer.echo(f"  After:  {result.best_score:.1%} accuracy")
+                typer.echo(
+                    f"  Change: {'+' if improvement >= 0 else ''}{improvement:.1%}"
+                )
+            else:
+                typer.echo(f"  Final accuracy: {result.best_score:.1%}")
+
+            typer.echo(f"  Iterations: {result.iterations}")
+
+            # Save optimized prompt if output specified
+            if output:
+                output_path = Path(output)
+                # Generate optimized prompt code
+                optimized_class = result.best_prompt_class
+
+                code = f'''"""Optimized prompt generated by FlowPrompt.
+
+Original: {prompt_path.name}
+Strategy: {strategy}
+Accuracy: {result.best_score:.1%}
+"""
+
+from flowprompt import Prompt
+from pydantic import BaseModel
+
+
+class {optimized_class.__name__}(Prompt):
+    """Optimized version of {prompt_class.__name__}."""
+
+    system = """{getattr(optimized_class, 'system', '')}"""
+    user = """{getattr(optimized_class, 'user', '')}"""
+'''
+                # Add Output class if present
+                if hasattr(optimized_class, 'Output'):
+                    output_model = optimized_class.Output
+                    if hasattr(output_model, 'model_fields'):
+                        fields = []
+                        for fname, finfo in output_model.model_fields.items():
+                            ftype = finfo.annotation.__name__ if hasattr(finfo.annotation, '__name__') else str(finfo.annotation)
+                            fields.append(f"        {fname}: {ftype}")
+                        code += f'''
+    class Output(BaseModel):
+{chr(10).join(fields)}
+'''
+
+                output_path.write_text(code)
+                typer.echo(f"\nOptimized prompt saved to: {output_path}")
+
+        except Exception as e:
+            typer.echo(f"Error during optimization: {e}", err=True)
+            raise typer.Exit(1) from None
+
     return app
 
 

@@ -10,13 +10,13 @@
 Install FlowPrompt with pip:
 
 ```bash
-pip install flowprompt
+pip install flowprompt-ai
 ```
 
 Or with uv:
 
 ```bash
-uv add flowprompt
+uv add flowprompt-ai
 ```
 
 ## Installation Options
@@ -24,19 +24,19 @@ uv add flowprompt
 ### With CLI Tools
 
 ```bash
-pip install flowprompt[cli]
+pip install flowprompt-ai[cli]
 ```
 
 ### With OpenTelemetry Tracing
 
 ```bash
-pip install flowprompt[tracing]
+pip install flowprompt-ai[tracing]
 ```
 
 ### With All Features
 
 ```bash
-pip install flowprompt[all]
+pip install flowprompt-ai[all]
 ```
 
 ## Provider Setup
@@ -73,7 +73,7 @@ ollama serve
 
 ```python
 import flowprompt
-print(flowprompt.__version__)  # Should print "0.1.0"
+print(flowprompt.__version__)  # Should print "0.2.0"
 ```
 
 ## Development Installation

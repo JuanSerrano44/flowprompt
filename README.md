@@ -1,6 +1,8 @@
 # FlowPrompt
 
-**Type-safe prompt management with automatic optimization for LLMs**
+**Stop guessing which prompt works. Measure it.**
+
+The only LLM framework with built-in A/B testing for prompts.
 
 [![PyPI](https://img.shields.io/pypi/v/flowprompt-ai.svg)](https://pypi.org/project/flowprompt-ai/)
 [![Downloads](https://static.pepy.tech/badge/flowprompt-ai)](https://pepy.tech/project/flowprompt-ai)
@@ -9,16 +11,18 @@
 [![License](https://img.shields.io/pypi/l/flowprompt-ai.svg)](https://github.com/yotambraun/flowprompt/blob/main/LICENSE)
 [![Tests](https://github.com/yotambraun/flowprompt/workflows/CI/badge.svg)](https://github.com/yotambraun/flowprompt/actions)
 [![codecov](https://codecov.io/gh/yotambraun/flowprompt/graph/badge.svg?token=3IDNOYK3D3)](https://codecov.io/gh/yotambraun/flowprompt)
+
 ---
 
 ## Why FlowPrompt?
 
-FlowPrompt bridges the gap between **overly complex frameworks** (LangChain) and **narrow single-purpose tools** (Instructor). It gives you:
+**Every LLM framework gives you structured outputs. Only FlowPrompt tells you which prompt actually works better.**
 
+- **A/B Testing** - Statistical significance testing for prompt variants
 - **Type safety** - Define prompts as Python classes with full IDE support
 - **Structured outputs** - Automatic validation with Pydantic models
-- **Multi-provider** - Switch between OpenAI, Anthropic, Google, or local models
-- **Production-ready** - Caching, tracing, cost tracking, and A/B testing built-in
+- **Multi-provider** - OpenAI, Anthropic, Google, or local models via LiteLLM
+- **Production-ready** - Caching, tracing, cost tracking built-in
 
 ```python
 from flowprompt import Prompt
@@ -62,13 +66,13 @@ pip install flowprompt-ai[multimodal] # Images, PDFs, audio, video
 
 | Feature | What it does |
 |---------|--------------|
+| [**A/B Testing**](#ab-testing) | Statistical significance testing for prompts |
 | [Structured Outputs](#structured-outputs) | Type-safe responses with Pydantic validation |
 | [Multi-Provider](#multi-provider-support) | OpenAI, Anthropic, Google, Ollama via LiteLLM |
-| [Streaming](#streaming) | Real-time responses with `stream()` and `astream()` |
+| [Optimization](#automatic-optimization) | DSPy-style automatic prompt improvement |
 | [Caching](#caching) | Reduce costs 50-90% with built-in caching |
 | [Observability](#observability) | Track costs, tokens, and latency |
-| [Optimization](#automatic-optimization) | DSPy-style automatic prompt improvement |
-| [A/B Testing](#ab-testing) | Statistical significance testing for prompts |
+| [Streaming](#streaming) | Real-time responses with `stream()` and `astream()` |
 | [Multimodal](#multimodal-support) | Images, documents, audio, and video |
 | [YAML Prompts](#yaml-prompts) | Store prompts in version-controlled files |
 
@@ -287,11 +291,34 @@ prompts = load_prompts("prompts/")
 
 ## CLI
 
+**Optimize prompts from the command line:**
+
+```bash
+# Optimize a prompt with training examples
+flowprompt optimize my_prompt.py examples.json --strategy fewshot
+
+# Output:
+# Loading prompt from my_prompt.py...
+#   Found: ExtractUser
+# Loading examples from examples.json...
+#   Loaded 10 examples
+# Evaluating baseline...
+#   Baseline accuracy: 65.0%
+# Optimizing with strategy='fewshot'...
+# --------------------------------------------------
+# OPTIMIZATION COMPLETE
+# --------------------------------------------------
+#   Before: 65.0% accuracy
+#   After:  89.0% accuracy
+#   Change: +24.0%
+```
+
+**Other commands:**
+
 ```bash
 flowprompt init my-project       # Initialize new project
-flowprompt list-prompts          # List available prompts
 flowprompt run prompt.yaml       # Run a prompt
-flowprompt test                  # Test all prompts
+flowprompt test                  # Validate prompts
 flowprompt stats                 # View usage statistics
 ```
 
@@ -301,16 +328,15 @@ flowprompt stats                 # View usage statistics
 
 | Feature | FlowPrompt | LangChain | Instructor | DSPy |
 |---------|:----------:|:---------:|:----------:|:----:|
+| **A/B Testing** | **Yes** | No | No | No |
 | Type-safe prompts | **Yes** | No | Yes | No |
-| Streaming | **Yes** | Yes | No | No |
+| Structured outputs | **Yes** | Partial | Yes | No |
+| Auto-optimization | **Yes** | No | No | Yes |
+| Multi-provider | **Yes** | Yes | Yes | Partial |
 | Caching | **Yes** | Partial | No | No |
 | Cost tracking | **Yes** | Partial | No | No |
+| Streaming | **Yes** | Yes | No | No |
 | YAML prompts | **Yes** | No | No | No |
-| CLI tools | **Yes** | No | No | No |
-| Multi-provider | **Yes** | Yes | Yes | Partial |
-| Auto-optimization | **Yes** | No | No | Yes |
-| A/B testing | **Yes** | No | No | No |
-| Multimodal | **Yes** | Partial | No | No |
 | Import time | **<100ms** | ~2s | <100ms | ~6s |
 
 ---

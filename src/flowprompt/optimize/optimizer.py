@@ -10,6 +10,7 @@ Provides DSPy-style optimization with:
 from __future__ import annotations
 
 import json
+import logging
 import random
 from abc import ABC, abstractmethod
 from collections.abc import Callable
@@ -31,6 +32,8 @@ if TYPE_CHECKING:
     from flowprompt.core.prompt import Prompt
 
 OutputT = TypeVar("OutputT", bound=BaseModel)
+
+logger = logging.getLogger(__name__)
 
 
 def _evaluate_dataset(
@@ -63,8 +66,9 @@ def _evaluate_dataset(
             output = prompt.run(model=model, temperature=temperature)
             predictions.append(output)
             ground_truth.append(ex.output)
-        except Exception:
-            # On error, append None to keep alignment
+        except Exception as e:
+            # On error, log and append None to keep alignment
+            logger.warning(f"Evaluation failed for example: {e}")
             predictions.append(None)
             ground_truth.append(ex.output)
 
@@ -479,8 +483,8 @@ Generate {num_candidates} improved versions as a JSON array:
             if json_match:
                 candidates = json.loads(json_match.group())
                 return candidates[: self.num_candidates]
-        except Exception:
-            pass
+        except Exception as e:
+            logger.warning(f"Failed to generate candidates via LLM: {e}")
 
         # Fallback: return variations of current prompt
         return [
@@ -744,8 +748,8 @@ class BootstrapOptimizer(BaseOptimizer):
                         confidence=confidence,
                         metadata={"round": round_num},
                     )
-                except Exception:
-                    pass
+                except Exception as e:
+                    logger.warning(f"Bootstrap recording failed for example: {e}")
 
             # Evaluate current performance using shared helper
             current_score = _evaluate_dataset(current_class, labeled, metric, model)
