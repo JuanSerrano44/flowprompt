@@ -255,7 +255,9 @@ def create_app() -> Any:
             "fewshot",
             help="Optimization strategy (fewshot, instruction, bootstrap)",
         ),
-        output: str = Option(None, "--output", "-o", help="Output file for optimized prompt"),
+        output: str = Option(
+            None, "--output", "-o", help="Output file for optimized prompt"
+        ),
         iterations: int = Option(10, help="Number of optimization iterations"),
     ) -> None:
         """Optimize a prompt using training examples.
@@ -401,21 +403,25 @@ from pydantic import BaseModel
 class {optimized_class.__name__}(Prompt):
     """Optimized version of {prompt_class.__name__}."""
 
-    system = """{getattr(optimized_class, 'system', '')}"""
-    user = """{getattr(optimized_class, 'user', '')}"""
+    system = """{getattr(optimized_class, "system", "")}"""
+    user = """{getattr(optimized_class, "user", "")}"""
 '''
                 # Add Output class if present
-                if hasattr(optimized_class, 'Output'):
+                if hasattr(optimized_class, "Output"):
                     output_model = optimized_class.Output
-                    if hasattr(output_model, 'model_fields'):
+                    if hasattr(output_model, "model_fields"):
                         fields = []
                         for fname, finfo in output_model.model_fields.items():
-                            ftype = finfo.annotation.__name__ if hasattr(finfo.annotation, '__name__') else str(finfo.annotation)
+                            ftype = (
+                                finfo.annotation.__name__
+                                if hasattr(finfo.annotation, "__name__")
+                                else str(finfo.annotation)
+                            )
                             fields.append(f"        {fname}: {ftype}")
-                        code += f'''
+                        code += f"""
     class Output(BaseModel):
 {chr(10).join(fields)}
-'''
+"""
 
                 output_path.write_text(code)
                 typer.echo(f"\nOptimized prompt saved to: {output_path}")
