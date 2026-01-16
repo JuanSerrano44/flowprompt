@@ -303,7 +303,7 @@ def create_app() -> Any:
 
             # Find Prompt subclass in the module
             prompt_class = None
-            for name, obj in inspect.getmembers(module, inspect.isclass):
+            for _name, obj in inspect.getmembers(module, inspect.isclass):
                 if issubclass(obj, Prompt) and obj is not Prompt:
                     prompt_class = obj
                     break
