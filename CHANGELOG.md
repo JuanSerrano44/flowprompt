@@ -11,6 +11,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Redis cache backend
 - Langfuse integration
 
+## [0.2.1] - 2026-01-16
+
+### Added
+- **CLI `optimize` command**: One-command prompt optimization from terminal
+  - `flowprompt optimize my_prompt.py examples.json --strategy fewshot`
+  - Shows before/after accuracy comparison
+  - Supports fewshot, instruction, and bootstrap strategies
+- Added `a-b-testing`, `prompt-testing`, `langchain-alternative` keywords for discoverability
+
+### Fixed
+- Fixed 404 documentation URL (now points to GitHub docs)
+- Fixed package name in installation docs (`flowprompt` → `flowprompt-ai`)
+- Fixed silent exception swallowing in optimizer (now logs warnings)
+- Added upper bounds to dependencies for security (litellm, jinja2, pyyaml)
+- Removed `dev` from `[all]` extra (don't ship linters to users)
+- Made basic example actually runnable with API key detection
+
+### Changed
+- README repositioned to lead with unique value proposition: "Stop guessing which prompt works. Measure it."
+- A/B Testing moved to top of feature comparison tables
+
 ## [0.2.0] - 2026-01-10
 
 ### Added
@@ -107,6 +128,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive test suite
 - Full type annotations
 
-[unreleased]: https://github.com/yotambraun/flowprompt/compare/v0.2.0...HEAD
+[unreleased]: https://github.com/yotambraun/flowprompt/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/yotambraun/flowprompt/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/yotambraun/flowprompt/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/yotambraun/flowprompt/releases/tag/v0.1.0

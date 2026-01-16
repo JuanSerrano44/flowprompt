@@ -56,7 +56,7 @@ Multimodal (NEW in v0.2.0):
     >>> result = VisionPrompt.describe("image.jpg").run(model="gpt-4o")
 """
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
 # Core
 # Caching

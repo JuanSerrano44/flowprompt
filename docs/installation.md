@@ -73,7 +73,7 @@ ollama serve
 
 ```python
 import flowprompt
-print(flowprompt.__version__)  # Should print "0.2.0"
+print(flowprompt.__version__)  # Should print "0.2.1"
 ```
 
 ## Development Installation
